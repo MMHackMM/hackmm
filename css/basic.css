@@ -1,5 +1,6 @@
 @charset "utf-8";
 /**初始化**/
+/**<!--(^･ｪ･^)--欢迎来到Hack萌妹-WWW.HackMM.COM--ฅ•ω•ฅ-->**/
 body,h1,h2,h3,p,ul,li,img,figure,figcaption {   /*去边框*/
 	margin: 0px;
 	padding: 0px;
@@ -23,7 +24,7 @@ div,li{  /*border，padding不扩充宽高*/
 	box-sizing:border-box;
 }
 .clearfix::after{  /*清理浮动div*/
-	content: "nikkocat.com";
+	content: "hackmm.com";
 	display: block;
 	height: 0;
 	visibility: hidden;

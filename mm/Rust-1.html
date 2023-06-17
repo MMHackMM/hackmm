@@ -1,24 +1,51 @@
 <!DOCTYPE html>
-<!--(^･ｪ･^)--Copyright©NikkoCat.COM--ฅ•ω•ฅ-->
+
+<!--(^･ｪ･^)--Copyright©HackMM.COM--ฅ•ω•ฅ-->
+<!--(^･ｪ･^)--Google和Firefox支持良好--ฅ•ω•ฅ-->
+<!--░░░░░░░░░░▄-->
+<!--░░░░░░░░▄▐░▄▄█████▄▄-->
+<!--░░░░░░▄█████████████▄▀▄▄░▄▄▄-->
+<!--░░░░░█████████████████▄██████-->
+<!--░░░░████▐█████▌████████▌█████▌-->
+<!--░░░████▌█████▌█░████████▐▀██▀-->
+<!--░▄█████░█████▌░█░▀██████▌█▄▄▀▄-->
+<!--░▌███▌█░▐███▌▌░░▄▄░▌█▌███▐███░▀-->
+<!--▐░▐██░░▄▄▐▀█░░░▐▄█▀▌█▐███▐█-->
+<!--  ░░███░▌▄█▌░░▀░░▀██░░▀██████▌-->
+<!--░░░▀█▌▀██▀░▄░░░░░░░░░███▐███-->
+<!--░░░░██▌░░░░░░░░░░░░░▐███████▌-->
+<!--░░░░███░░░░░▀█▀░░░░░▐██▐███▀▌-->
+<!--░░░░▌█▌█▄░░░░░░░░░▄▄████▀░▀-->
+<!--░░░░░░█▀██▄▄▄░▄▄▀▀▒█▀█░▀-->
+<!--░░░░░░░░░▀░▀█▀▌▒▒▒░▐▄▄-->
+<!--░░░░░░░░▄▄▀▀▄░░░░░░▄▀░▀▀▄▄-->
+<!--░░░░░░▄▀░▄▀▄░▌░░░▄▀░░░░░░▄▀▀▄-->
+<!--░░░░░▐▒▄▀▄▀░▌▀▄▄▀░░░░░░▄▀▒▒▒▐-->
+<!--░░░░▐▒▒▌▀▄░░░░░▌░░░░▄▄▀▒▐▒▒▒▒▌-->
+<!--░░░▐▒▒▐░▌░▀▄░░▄▀▀▄▀▀▒▌▒▐▒▒▒▒▐▐-->
+<!--░░░▌▄▀░░░▄▀░█▀▒▒▒▒▀▄▒▌▐▒▒▒▒▒▌▌-->
+<!--░░▄▀▒▐░▄▀░░░▌▒▐▒▐▒▒▒▌▀▒▒▒▒▒▐▒▌-->
+<!--__  __     ______     ______     __  __     __    __     __    __    -->
+<!------░█░█░█▀█░█▀▀░█░█░█▄█░█▄█------>
+<!------░█▀█░█▀█░█░░░█▀▄░█░█░█░█------>
+<!------░▀░▀░▀░▀░▀▀▀░▀░▀░▀░▀░▀░▀------>
 <html lang="zh-cn">
+<!--head头包含js和css调用以及站点keywords等等-->
 <head>
 	<meta charset="UTF-8">
-	<!--(^･ｪ･^)--google和firefox支持良好--ฅ•ω•ฅ-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0,user-scalable=no">
-	<meta name="description" content="NikkoCat,阳光猫小黑,会定期分享好玩的Windows|Linux|MacOS系统操作技巧,实用的软件推荐,系统漏洞防御方法,办公自动化,能够提高日常工作效率的小技巧,通过网络赚钱的思路等...">
-	<meta name="author" content="NikkoCat.COM">
-	<meta name="keywords" content="NikkoCat,nikkocat,阳光猫小黑,阳光猫,Windows操作技巧,Linux操作技巧,MacOS操作技巧,软件推荐,Windows软件推荐,Linux软件推荐,MacOS软件推荐,漏洞修复,工作效率提升,自动化办公,office技巧,PPT模板,python全自动办公,系统激活,Windows系统激活,新手学电脑,小白学电脑,电脑小白,Rust,Rust编程,黑客技术,黑客,红客,hack,hacker">
-	<title>Rust-1-编译基础 - NikkoCat - 阳光猫小黑 - WWW.NikkoCat.COM</title>
+	<meta name="description" content="HackMM,我们的征途,是星辰大海.">
+	<meta name="author" content="HackMM.COM">
+	<meta name="keywords" content="hackmm,HackMM,黑客学习,Windows技术,Linux技术,Archlinux,Linux软件,漏洞挖掘,网络安全,渗透测试,,自动化办公,python全自动办公,Windows系统激活,新手学电脑,IT技术,Rust,Rust编程,黑客技术,黑客,红客,honker,hack,hacker">
+	<title>Rust-1-编译基础 - HackMM.COM - WWW.HackMM.COM</title>
 	<link rel="shortcut icon" type="image/x-icon" href="../logo/favicon.png">
 	<link rel="stylesheet" type="text/css" href="../css/basic.css">
 	<link rel="stylesheet" type="text/css" href="../css/text.css">
-	<!-- 代码块高亮js -->
-	<link type="text/css" rel="stylesheet" href="../plugins/SyntaxHighlighter/styles/shCore.css"/>
-	<link type="text/css" rel="stylesheet" href="../plugins/SyntaxHighlighter/styles/shThemeRDark.css"/>
-	<script type="text/javascript" src="../plugins/SyntaxHighlighter/scripts/shCore.js"></script>
-	<script type="text/javascript" src="../plugins/SyntaxHighlighter/scripts/shBrushCpp.js"></script>
-	<script type="text/javascript">
-	SyntaxHighlighter.all();
+	<link rel="stylesheet" type="text/css" href="../css/text.css">
+	<!--prism.js代码高亮模块-->
+	<link rel="stylesheet" href="../css/prism.css" data-noprefix />
+	<script src="../plugins/prism.js"></script>
+	<!--/prism.js代码高亮模块-->
 	</script>
 </head>
 <body>
@@ -26,7 +53,7 @@
 	<header id="nav">
 			<div class="nav-container"> 
 				<!-- 根大纲-->
-				<a href="https://www.nikkocat.com" title="阳光猫小黑">
+				<a href="https://www.hackmm.com" title="HackMM">
 					<h1 class="nav-logo">阳光猫小黑</h1>
 				</a>
 				<h2 class="nav-site-description desc-hidden">
@@ -82,10 +109,11 @@
 
 					<p>如果只是写一些小应用，并不需要使用cargo规范，可以直接使用rustc进行编译，如下：</p>
 					<p>*注：Rust系列所有程序都在linux系统中测试执行，如果您是Windows系统，生成的文件后缀是.exe，执行方法会有所不同。</p>
-					<pre class="brush: c;">
+					<pre class='line-numbers' data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'>
+					<code class="lang-rust">
 					//用记事本写一个小程序，保存为.rs结尾的文件,本例保存为"nikkocat.rs"
 					fn main() {
-					    println!("Hello NikkoCat.com");
+					    println!("Hello hackmm.com");
 					}
 
 					//在命令行中执行 "rustc 文件名"
@@ -93,8 +121,8 @@
 
 					//执行结果，会在命令行所在文件夹中生成nikkocat可执行程序，直接执行这个程序
 					 ./nikkocat
-					Hello NikkoCat.com
-					</pre>
+					Hello hackmm.com
+					</code></pre>
 
 					<h2 id="Rust-base-2">0×2.通过cargo规范编译程序</h2>
 					<p>
@@ -112,7 +140,8 @@
 
 					<h2 id="Rust-base-3">0×3.一个猜数小程序</h2>
 
-					<pre class="brush: c;">
+					<pre class='line-numbers' data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'>
+					<code class="lang-rust">
 					//使用cargo规范创建一个猜数小程序，在终端中执行下面的命令
 					cargo new guess_game 
 
@@ -161,17 +190,19 @@
 					        }
 					    }
 					}
-					</pre>
+					</code></pre>
 					<p>我们来拆解一下这段代码，首先头文件：</p>
-					<pre class="brush: c;">
+					<pre class='line-numbers' data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'>
+					<code class="lang-rust">
 					//使用use关键词，作用是引用一些现成的Rust模块或类
 					use std::io;  //标准输入输出模块，包含println函数
 					use std::cmp::Ordering; //包含数学运算转换和比较的模块
 					use rand::Rng;  //包含随机数生成器的模块
-					</pre>
+					</code></pre>
 
 					<p>再来看函数主体：</p>
-					<pre class="brush: c;">
+					<pre class='line-numbers' data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'>
+					<code class="lang-rust">
 					fn main() {   //main函数，程序的入口点，系统执行程序时，从这里开始运行
 					    println!("Guess the number!"); //println!函数，打印一行文字在屏幕上显示
 
@@ -184,9 +215,10 @@
 					    //只需要知道，这一句的功能就是从1-100里面随机选择一个数字
 					    //这个数字取出来后存放到secret_number变量里
 					    //唯一要注意的是，随机选择的范围(1..101)包含1，但是不包含101
-					</pre>
+					</code></pre>
 
-					<pre class="brush: c;">
+					<pre class='line-numbers' data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'>
+					<code class="lang-rust">
 					//loop循环，进程执行程序遇到loop后，如果loop内部没有break跳出，将反复执行loop中的内容，直到被系统终止
 					loop {
 					        println!("Please input your guess.");
@@ -223,14 +255,14 @@
 					            }
 					        }
 					    }
-					</pre>
+					</code></pre>
 					<!-- /正文 -->
 
 				<footer class="text-footer">
 					<p>
-						*转载请注明来自:<a title="NikkoCat.COM" href="https://www.nikkocat.com" target="_blank">阳光猫小黑(NikkoCat.COM)</a>
+						*转载请注明来自:<a title="hackmm.com" href="https://www.hackmm.com" target="_blank">阳光猫小黑(hackmm.com)</a>
 					</p>
-					<p>*原文连接:<a title="Rust-1-编译基础" href="https://www.nikkocat.com/cat/Rust-1.html" target="_blank">https://www.nikkocat.com/cat/Rust-1.html</a></p>
+					<p>*原文连接:<a title="Rust-1-编译基础" href="https://www.hackmm.com/cat/Rust-1.html" target="_blank">https://www.hackmm.com/cat/Rust-1.html</a></p>
 				</footer>
 			</article>
 			<!-- /文章区 -->	
@@ -241,7 +273,7 @@
 	<!-- footer -->
 	<footer id="footer">
 		<div class="footer-container">
-			NikkoCat.COM &nbsp;<img src="../logo/copyright.png" alt="未经作者允许,禁止任何形式的复制与转载" title="未经作者允许,禁止任何形式的复制与转载">&nbsp;All Rights Reserved.
+			hackmm.com &nbsp;<img src="../logo/copyright.png" alt="未经作者允许,禁止任何形式的复制与转载" title="未经作者允许,禁止任何形式的复制与转载">&nbsp;All Rights Reserved.
 		</div>
 	</footer>
 	<!-- /footer -->
