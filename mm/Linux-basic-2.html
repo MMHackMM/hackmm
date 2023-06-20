@@ -39,7 +39,7 @@
 	<meta name="description" content="HackMM,我们的征途,是星辰大海.">
 	<meta name="author" content="HackMM.COM">
 	<meta name="keywords" content="hackmm,HackMM,hackmm.com,Hack萌妹,黑客萌妹,黑客学习,Windows技术,Linux技术,Archlinux,Linux软件,漏洞挖掘,网络安全,渗透测试,自动化办公,python全自动办公,Windows系统激活,新手学电脑,IT技术,Rust,Rust编程,黑客技术,黑客,红客,honker,hack,hacker">
-	<title>[Linux基础]-1-目录基础命令 - Hack萌妹 - HackMM.COM</title>
+	<title>[Linux基础]-2-内容读取命令 - Hack萌妹 - HackMM.COM</title>
 	<link rel="shortcut icon" type="image/x-icon" href="../logo/favicon.png">
 	<link rel="stylesheet" type="text/css" href="../css/basic.css">
 	<link rel="stylesheet" type="text/css" href="../css/text.css">
@@ -90,39 +90,32 @@
 			<!-- 文章区 -->
 			<article class="text-container">
 				<header class="text-header">
-					<h1>[Linux基础]-1-目录基础命令</h1>	
+					<h1>[Linux基础]-2-内容读取命令</h1>	
 				</header>
 				<section class="text-body">
 					<h2>引言</h2>
-					<p>这篇文章记录7个和目录相关的常用Linux命令，也是Linux中最使用频率最高的几个命令。</p>
+					<p>这篇文章记录6个和文件内容读取相关的常用Linux命令，也是Linux中最使用频率最高的几个文件内容读取命令。</p>
 					<!-- 目录 -->
 					<h2>文章目录</h2>
 					<ul class="contents">	
-						 <li><a href="#Directory-related-commands-1">0×1.ls列出详细信息</a></li>
-						 <li><a href="#Directory-related-commands-2">0×2.cd切换目录</a></li>
-						 <li><a href="#Directory-related-commands-3">0×3.pwd查看当前目录</a></li>
-						 <li><a href="#Directory-related-commands-4">0×4.rm删除文件或目录</a></li>
-						 <li><a href="#Directory-related-commands-5">0×5.rmdir删除目录</a></li>
-						 <li><a href="#Directory-related-commands-6">0×6.mv移动目录或文件</a></li>
-						 <li><a href="#Directory-related-commands-7">0×7.cp复制目录或文件</a></li>
+						 <li><a href="#Content-read-1">0×1.cat命令</a></li>
+						 <li><a href="#Content-read-2">0×2.more命令</a></li>
+						 <li><a href="#Content-read-3">0×3.less命令</a></li>
+						 <li><a href="#Content-read-4">0×4.head命令</a></li>
+						 <li><a href="#Content-read-5">0×5.tail命令</a></li>
+						 <li><a href="#Content-read-6">0×6.kate命令</a></li>
 					 </ul>
 					<!-- /目录 -->
 
 					<!-- 正文 -->
-					<h2 id="Directory-related-commands-1">0×1.ls列出详细信息</h2>
+					<h2 id="Content-read-1">0×1.cat命令</h2>
 
-					<p>ls命令是list的缩写，用来列出终端所在目录中的文件，ls常用参数列表如下：</p>
-					<p class="indent-p">
-						ls -a 列出目录所有文件，包含以.开头的隐藏文件<br>
-						ls -A 列出除.及..的其它文件<br>
-						ls -r 反序排列，配合S和t使用（ls排序默认从大到小，反序之后从小到大）<br>
-						ls -t 以文件修改时间排序<br>
-						ls -S 以文件大小排序<br>
-						ls -h 以易读大小显示（默认文件大小显示为字节，加上h之后显示为k，mb等形式）<br>
-						ls -l 详细信息显示，除了文件名之外，还将文件的权限、所有者、文件大小等信息详细列出来<br>
+					<p>cat命令能够用来显示文本文件中内容，还可以用来创建文本文件并且写入数据，cat命令有两个常用参数：</p>
+					<p class="indent-p">     
+    				-b 对非空输出行号<br>
+					-n 输出所有行号<br>
 					</p>
-					<p>ls命令演示：</p>
-
+					<p>cat命令示例：</p>
 					<!--bash-->
 					<pre class="command-line" 
 						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
@@ -130,21 +123,29 @@
 					     data-host="hackmm.com" 
 					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
 					<code class="language-bash">
-					ls        #直接列出根目录下的文件和文件夹（在不同终端中，目录和文件夹是以不同的颜色显示的）
-					ls -a   #列出所有文件，.代表当前文件夹，..代表当前文件夹的上一层目录
-					ls -l    #列表形式，列出文件的详细信息
-					ls -alSh #以文件大小排序，用列表形式列出所有文件和文件夹的详细详细，并且以易读的方式显示
-					ls -alShr #和上一条命令一样，r参数会将结果反序排列
-					ls -alth #以文件修改时间排序，显示目录中文件和文件夹的详细信息
-					ls | sed "s:^:`pwd`/:" #列出当前文件夹中所有文件和文件夹的绝对路径
-					ls hackmm* #列出所有hackmm开头的文件，*是通配符，代替任意多个字符
+					cat hackmm #一次性显示hackmm中的内容
+					cat -b hackmm #显示hackmm中的内容，在非空行前面添加行号
+					cat -n hackmm #显示hackmm中的内容，对所有行都添加行号
+					cat hackmm hk1 > hk2 #将将hackmm和hk1中的内容合并，写入hk2文件中
+					cat -b hackmm hk1 > hk2 #将hackmm和hk1中的内容合并，并且非空行添加上行号，写入hk2文件中
+					cat -n hackmm hk1 > hk2 #将hackmm和hk1中的内容合并，每一行都添加上行号，写入hk2文件中
+					cat > hackmm << exit #从键盘读取输入，直到读取到exit结束输入，将输入的内容写入hackmm
+					cat >> hackmm << exit #从键盘读取输入，直到读取到exit结束输入，将输入的内容追加写入hackmm
+					tac hackmm #反向读取hackmm中的内容
+					tac >> hackmm << 111 #上面的规则对反向tac同样适用，这里不再赘述
 					</code>
 					</pre>
 
 
-					<h2 id="Directory-related-commands-2">0×2.cd切换目录</h2>
+					<h2 id="Content-read-2">0×2.more命令</h2>
 
-					<p>cd是Change Directory的缩写，意思为改变目录，用于切换终端所在目录：</p>
+					<p>more命令用来显示文件中的内容，不同于cat的是，more遇到大文件时会分屏显示，不会一次性显示完所有内容，使用者可以按回车或空格显示剩下的内容，按回车会一行一行往下显示，按空格会一次往下显示一页内容，按b键可以往回显示一页内容，常用参数如下：</p>
+					<p class="indent-p">     
+    				+n 从笫 n 行开始显示<br>
+					-n 定义屏幕大小为n行<br>
+					q 退出more
+					</p>
+					<p>more命令示例：</p>
 					<!--bash-->
 					<pre class="command-line" 
 						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
@@ -152,18 +153,28 @@
 					     data-host="hackmm.com" 
 					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
 					<code class="language-bash">
-					cd / #切换到根目录
-					cd ~ #切换到当前用户的家目录
-					cd /home/mm #切换到home目录下的mm家目录
-					cd - #切换到上一个目录
-					cd !$ #将上一个命令的参数当做cd的参数使用
+					more hackmm #一般用法，可以一页一页显示文件中的内容
+					more +3 hackmm #从第3行开始显示文件中的内容
+					more -5 hackmm #将显示窗口调整成5行，每次只能显示5行内容
+					more +3 -5 #从第3行开始显示，每次显示5行内容
+					ls -l | more -3 #将ls -l命令的结果发送给more读取，每次显示3行ls -l命令的结果
 					</code>
 					</pre>
 
 
-					<h2 id="Directory-related-commands-3">0×3.pwd查看当前目录</h2>
+					<h2 id="Content-read-3">0×3.less命令</h2>
 
-					<p>pwd是Print Working Directory的首字母缩写，用于查看终端当前处在哪个目录内：</p>
+					<p>less同more一样，也提供分页显示文件内容的功能，相比more，less的搜索功能更加强大，下面是less命令的常用参数：</p>
+					<p class="indent-p">     
+    				-i 忽略搜索时的大小写<br>
+					-N 显示每行的行号<br>
+					-s 显示连续空行为一行<br>
+					/字符串：向下搜索“字符串”的功能<br>
+					?字符串：向上搜索“字符串”的功能<br>
+					n：向下重复前一个搜索（配合/和?搜索语法使用）<br>
+					N：向上重复前一个搜索（配合/和?搜索语法使用）
+					</p>
+					<p>less命令示例：</p>
 					<!--bash-->
 					<pre class="command-line" 
 						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
@@ -171,13 +182,20 @@
 					     data-host="hackmm.com" 
 					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
 					<code class="language-bash">
-					pwd #查看当前目录绝对路径
+					less -iN hackmm #在使用/和?搜索时，忽略大小写，并且显示每行的行号，具体请看本文下方视频演示
 					</code>
 					</pre>
 
-					<h2 id="Directory-related-commands-4">0×4.rm删除文件或目录</h2>
+					<h2 id="Content-read-4">0×4.head命令</h2>
 
-					<p>rm是Remove的缩写，用于删除目录或者文件：</p>
+					<p>head命令用来显示文件开头或者结尾指定行数，用在只需读取文件前几行或后几行的场景，下面是head命令常用参数：</p>
+					<p class="indent-p">     
+    				-n [num] 显示文件开头num行<br>
+    				-n [-num] 显示到文件结尾倒数num-1行<br>
+    				-c [num] 显示文件开头num个字节<br>
+    				-c [-num] 显示到文件结尾第num-1个字节
+					</p>
+					<p>head命令示例：</p>
 					<!--bash-->
 					<pre class="command-line" 
 						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
@@ -185,18 +203,21 @@
 					     data-host="hackmm.com" 
 					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
 					<code class="language-bash">
-					rm test.txt #直接删除当前目录下的文件test.txt
-					rm /home/mm/test.txt #使用绝对路径，删除mm家目录下的test.txt
-					rm -i *.txt #删除当前目录下所有.txt结尾的文件，并且逐个询问如果输入y就删除
-					rm -r test_dir #删除目录，需要加-r参数
-					rm -r test_dir test.txt 12345.mp4 一次性删除一个文件夹和两个文件
-					rm -rf *.log #不询问，强制删除当前目录下的.log结尾的文件
+					head -n 3 hackmm #显示hackmm前三行
+					head -n -3 hackmm #显示到hackmm倒数第四行
+					head -c 8 hackmm #显示hackmm前8个字节
+					head -c -3 hackmm #显示到hackmm倒数第4个字节
 					</code>
 					</pre>
 
-					<h2 id="Directory-related-commands-5">0×5.rmdir删除目录</h2>
+					<h2 id="Content-read-5">0×5.tail命令</h2>
 
-					<p>rmdir是Remove Directory的缩写，用于删除空目录或者空的目录结构：</p>
+					<p>tail可以用来显示文件最后几行，下面是tail命令常用参数：</p>
+					<p class="indent-p">     
+    				-f 监听模式读取（用于监控文件新增内容）<br>
+    				-n [num] 从文件末尾，向前读取num行
+					</p>
+					<p>tail命令示例：</p>
 					<!--bash-->
 					<pre class="command-line" 
 						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
@@ -204,15 +225,14 @@
 					     data-host="hackmm.com" 
 					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
 					<code class="language-bash">
-					rmdir test #如果test是一个空目录，就能直接删除
-					rmdir -p test/sub1/sub2 #使用-p参数，如果test下面只有一个sub1，并且sub1下面只有一个sub2，并且都是空目录，就能一并删除
+					tail -n hackmm #读取hackmm最后3行
+					tail -f hackmm #持续监听读取hackmm文件的新内容，如果这个时候向hackmm写入新数据，就会被tail读取到
 					</code>
 					</pre>
-					<p>除非用作特殊判断，否则使用rm -rf命令删除目录会方便很多。</p>
 
-					<h2 id="Directory-related-commands-6">0×6.mv移动目录或文件</h2>
+					<h2 id="Content-read-6">0×6.kate命令</h2>
 
-					<p>mv是Move的缩写，可以用来移动文件或者将文件改名：</p>
+					<p>kate是图形界面下的一个软件，可以用它直接打开文本文件：</p>
 					<!--bash-->
 					<pre class="command-line" 
 						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
@@ -220,31 +240,10 @@
 					     data-host="hackmm.com" 
 					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
 					<code class="language-bash">
-					mv hackmm hackmm.com #将hackmm文件改名为hackmm.com
-					mv h1 h2/ h3 hk/ #将h1 h2 h3，移动到hk文件夹中，其中h2为文件夹
-					mv * hk/ #将当前目录所有文件，移动到hk目录下
-					mv -i * ../ #将当前目录所有文件，移动到上一层目录中，如果遇到重名文件，提示是否覆盖
+					kate hackmm #使用kate打开hackmm
 					</code>
 					</pre>
-
-					<h2 id="Directory-related-commands-7">0×7.cp复制目录或文件</h2>
-					
-					<p>cp是Copy的缩写，可以用来复制文件或文件夹：</p>
-					<!--bash-->
-					<pre class="command-line" 
-						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
-					     data-user="mm" 
-					     data-host="hackmm.com" 
-					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
-					<code class="language-bash">
-					cp hk1.txt hk2.txt #将hk1.txt复制一份保存为hk2.txt
-					cp -a hk1.txt hk2.txt #将hk1.txt复制一份保存为hk2.txt，并且保存hk1.txt的'访问时间'和'修改时间'不变
-					cp -r hackmm/ hackmm_com/ #将hackmm目录复制一份保存为hackmm_com目录
-					cp -r hackmm/ hk1.txt hk2.txt hackmm_com/ #将前面一个目录和两个文件复制到hackmm_com目录
-					cp -i hk1.txt hk2.txt hackmm_com/ #将前面两个文件复制到hackmm_com目录，如果有重名文件提示是否覆盖
-					cp -s hk1.txt hk1_link.txt #创建一个连接文件hk1_link.txt，相当于一个快捷方式，打开hk1_link.txt相当于打开hk1.txt
-					</code>
-					</pre>
+					<p>除了kate外，还有很多图形界面下的文本编辑器都可以使用相同的方法打开文件，这里不再赘述。</p>
 
 					<!-- /正文 -->
 
@@ -252,7 +251,7 @@
 					<p>
 						*转载请注明来自:<a title="HackMM.COM" href="https://www.HackMM.com" target="_blank">HackMM.COM</a>
 					</p>
-					<p>*原文连接:<a title="[Linux基础]-1-目录基础命令" href="https://www.HackMM.com/mm/Linux-basic-1.html" target="_blank">https://www.HackMM.com/mm/Linux-basic-1.html</a></p>
+					<p>*原文连接:<a title="[Linux基础]-2-内容读取命令" href="https://www.HackMM.com/mm/Linux-basic-2.html" target="_blank">https://www.HackMM.com/mm/Linux-basic-1.html</a></p>
 				</footer>
 			</article>
 			<!-- /文章区 -->	
