@@ -72,11 +72,6 @@
 								<span class="link-word"><img src="../logo/home.png" alt="home" class="link-img"><span class="word-hidden">首页</span></span>
 							</a>
 						</li>
-						<li class="li-hidden">
-							<a href="https://www.youtube.com/channel/UCIsI4Q2tuMO3VF_aRNGNN2w" title="HackMM-YouTube" target="_blank">
-								<span class="link-word"><img src="../logo/YouTube.png" alt="pt" class="link-img"><span class="word-hidden">YouTube</span></span>
-							</a>
-						</li>
 						<li>
 							<a href="../sitemap.html" title="sitemap">
 								<span class="link-word"><img src="../logo/archives.png" alt="archives" class="link-img"><span class="word-hidden">所有内容</span></span>
@@ -99,106 +94,157 @@
 				</header>
 				<section class="text-body">
 					<h2>引言</h2>
-					<p>引言内容。</p>
+					<p>这篇文章记录7个和目录相关的常用Linux命令，也是Linux中最使用频率最高的几个命令。</p>
 					<!-- 目录 -->
 					<h2>文章目录</h2>
 					<ul class="contents">	
-						 <li><a href="#pt-1">0×1.</a></li>
-						 <li><a href="#pt-2">0×2.</a></li>
-						 <li><a href="#pt-3">0×3.</a></li>
+						 <li><a href="#Directory-related-commands-1">0×1.ls列出详细信息</a></li>
+						 <li><a href="#Directory-related-commands-2">0×2.cd切换目录</a></li>
+						 <li><a href="#Directory-related-commands-3">0×3.pwd查看当前目录</a></li>
+						 <li><a href="#Directory-related-commands-4">0×4.rm删除文件或目录</a></li>
+						 <li><a href="#Directory-related-commands-5">0×5.rmdir删除目录</a></li>
+						 <li><a href="#Directory-related-commands-6">0×6.mv移动目录或文件</a></li>
+						 <li><a href="#Directory-related-commands-7">0×7.cp复制目录或文件</a></li>
 					 </ul>
 					<!-- /目录 -->
 
 					<!-- 正文 -->
-					<h2 id="pt-1">0×1.</h2>
-					<p>。。。</p>
+					<h2 id="Directory-related-commands-1">0×1.ls列出详细信息</h2>
 
-					<!--prism.js代码高亮模块-->
-					<!--rust-->
-					<pre class='line-numbers' data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！' >
-					<code class="lang-rust">
-					fn main() {
-					    let x:i8=5;
-					    if x<3 {
-					        println!("x<3");
-					    } else if x>8 {
-					        println!("x>8");
-					    } else if x==5 {
-					        println!("x = {}", x); 
-					    } else {
-					        println!("HackMM.com");
-					    }
-					}
-					</code>
-					</pre>
+					<p>ls命令是list的缩写，用来列出终端所在目录中的文件，ls常用参数列表如下：</p>
+					<p class="indent-p">
+						ls -a 列出目录所有文件，包含以.开头的隐藏文件<br>
+						ls -A 列出除.及..的其它文件<br>
+						ls -r 反序排列，配合S和t使用（ls排序默认从大到小，反序之后从小到大）<br>
+						ls -t 以文件修改时间排序<br>
+						ls -S 以文件大小排序<br>
+						ls -h 以易读大小显示（默认文件大小显示为字节，加上h之后显示为k，mb等形式）<br>
+						ls -l 详细信息显示，除了文件名之外，还将文件的权限、所有者、文件大小等信息详细列出来<br>
+					</p>
+					<p>ls命令演示：</p>
 
 					<!--bash-->
 					<pre class="command-line" 
 						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
 					     data-user="mm" 
 					     data-host="hackmm.com" 
-					     data-output="3-9,11"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
 					<code class="language-bash">
-					cd ~/.ssh
-					ll
-					总用量 24
-					drwx------  2 mm mm 4096  6月  8 20:54 ./
-					drwxr-x--- 23 mm mm 4096  6月 12 07:23 ../
-					-rw-------  1 mm mm 2610  6月  8 20:20 id_rsa
-					-rw-r--r--  1 mm mm  574  6月  8 20:20 id_rsa.pub
-					-rw-------  1 mm mm  806  6月  8 20:54 known_hosts
-					-rw-r--r--  1 mm mm  142  6月  8 20:54 known_hosts.old
-					pwd
-					/home/hackmm
+					ls        #直接列出根目录下的文件和文件夹（在不同终端中，目录和文件夹是以不同的颜色显示的）
+					ls -a   #列出所有文件，.代表当前文件夹，..代表当前文件夹的上一层目录
+					ls -l    #列表形式，列出文件的详细信息
+					ls -alSh #以文件大小排序，用列表形式列出所有文件和文件夹的详细详细，并且以易读的方式显示
+					ls -alShr #和上一条命令一样，r参数会将结果反序排列
+					ls -alth #以文件修改时间排序，显示目录中文件和文件夹的详细信息
+					ls | sed "s:^:`pwd`/:" #列出当前文件夹中所有文件和文件夹的绝对路径
+					ls hackmm* #列出所有hackmm开头的文件，*是通配符，代替任意多个字符
 					</code>
 					</pre>
 
-					<!--目录树tree-->
-					<pre data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！' >
-					<code class='language-treeview'>
-					Foresee/
-					├── Media/
-					|   ├── Horizon.mp3
-					|   ├── Info.mp4
-					|   └── logo.svg
-					|   ├── document.docx
-					|   └── presentation.ppt
-					|   ├── data.xls
-					├── .gitignore
-					├── style.css
-					├── archive.zip
-					├── archive.rar
-					├── index.html
-					├── README.md
+
+					<h2 id="Directory-related-commands-2">0×2.cd切换目录</h2>
+
+					<p>cd是Change Directory的缩写，意思为改变目录，用于切换终端所在目录：</p>
+					<!--bash-->
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="mm" 
+					     data-host="hackmm.com" 
+					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					cd / #切换到根目录
+					cd ~ #切换到当前用户的家目录
+					cd /home/mm #切换到home目录下的mm家目录
+					cd - #切换到上一个目录
+					cd !$ #将上一个命令的参数当做cd的参数使用
 					</code>
 					</pre>
 
-					<pre class='line-numbers' data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！' >
-					<code class="language-diff diff-highlight">
-					#include &lt;stdio.h&gt;
-					-   int main()
-					+    {
-					+        printf("C programme\n");
-					        return 0;
-					    }
+
+					<h2 id="Directory-related-commands-3">0×3.pwd查看当前目录</h2>
+
+					<p>pwd是Print Working Directory的首字母缩写，用于查看终端当前处在哪个目录内：</p>
+					<!--bash-->
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="mm" 
+					     data-host="hackmm.com" 
+					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					pwd #查看当前目录绝对路径
 					</code>
 					</pre>
-					<!--/prism.js代码高亮模块-->
 
-					<!--图片-->
-					<img src="images/Rust-type-of-data.png" alt="images/Rust-type-of-data.png">
+					<h2 id="Directory-related-commands-4">0×4.rm删除文件或目录</h2>
 
-					<!--缩进的p-->
-					<p class="indent-p"></p>
+					<p>rm是Remove的缩写，用于删除目录或者文件：</p>
+					<!--bash-->
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="mm" 
+					     data-host="hackmm.com" 
+					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					rm test.txt #直接删除当前目录下的文件test.txt
+					rm /home/mm/test.txt #使用绝对路径，删除mm家目录下的test.txt
+					rm -i *.txt #删除当前目录下所有.txt结尾的文件，并且逐个询问如果输入y就删除
+					rm -r test_dir #删除目录，需要加-r参数
+					rm -r test_dir test.txt 12345.mp4 一次性删除一个文件夹和两个文件
+					rm -rf *.log #不询问，强制删除当前目录下的.log结尾的文件
+					</code>
+					</pre>
 
-					<h2 id="pt-2">0×2.</h2>	
-					<p>。。。</p>
+					<h2 id="Directory-related-commands-5">0×5.rmdir删除目录</h2>
 
-					<h2 id="pt-3">0×3.</h2>
-					<p>。。。</p>
+					<p>rmdir是Remove Directory的缩写，用于删除空目录或者空的目录结构：</p>
+					<!--bash-->
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="mm" 
+					     data-host="hackmm.com" 
+					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					rmdir test #如果test是一个空目录，就能直接删除
+					rmdir -p test/sub1/sub2 #使用-p参数，如果test下面只有一个sub1，并且sub1下面只有一个sub2，并且都是空目录，就能一并删除
+					</code>
+					</pre>
+					<p>除非用作特殊判断，否则使用rm -rf命令删除目录会方便很多。</p>
 
-					<!--video模块-->
-				    <video src="video/test.mp4" controls="controls">该浏览器不支持h5的video标签</video>
+					<h2 id="Directory-related-commands-6">0×6.mv移动目录或文件</h2>
+
+					<p>mv是Move的缩写，可以用来移动文件或者将文件改名：</p>
+					<!--bash-->
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="mm" 
+					     data-host="hackmm.com" 
+					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					mv hackmm hackmm.com #将hackmm文件改名为hackmm.com
+					mv h1 h2/ h3 hk/ #将h1 h2 h3，移动到hk文件夹中，其中h2为文件夹
+					mv * hk/ #将当前目录所有文件，移动到hk目录下
+					mv -i * ../ #将当前目录所有文件，移动到上一层目录中，如果遇到重名文件，提示是否覆盖
+					</code>
+					</pre>
+
+					<h2 id="Directory-related-commands-7">0×7.cp复制目录或文件</h2>
+					
+					<p>cp是Copy的缩写，可以用来复制文件或文件夹：</p>
+					<!--bash-->
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="mm" 
+					     data-host="hackmm.com" 
+					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					cp hk1.txt hk2.txt #将hk1.txt复制一份保存为hk2.txt
+					cp -a hk1.txt hk2.txt #将hk1.txt复制一份保存为hk2.txt，并且保存hk1.txt的'访问时间'和'修改时间'不变
+					cp -r hackmm/ hackmm_com/ #将hackmm目录复制一份保存为hackmm_com目录
+					cp -r hackmm/ hk1.txt hk2.txt hackmm_com/ #将前面一个目录和两个文件复制到hackmm_com目录
+					cp -i hk1.txt hk2.txt hackmm_com/ #将前面两个文件复制到hackmm_com目录，如果有重名文件提示是否覆盖
+					cp -s hk1.txt hk1_link.txt #创建一个连接文件hk1_link.txt，相当于一个快捷方式，打开hk1_link.txt相当于打开hk1.txt
+					</code>
+					</pre>
 
 					<!-- /正文 -->
 
