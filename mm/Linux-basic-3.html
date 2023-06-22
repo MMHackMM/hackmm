@@ -39,7 +39,7 @@
 	<meta name="description" content="HackMM,我们的征途,是星辰大海.">
 	<meta name="author" content="HackMM.COM">
 	<meta name="keywords" content="hackmm,HackMM,hackmm.com,Hack萌妹,黑客萌妹,黑客学习,Windows技术,Linux技术,Archlinux,Linux软件,漏洞挖掘,网络安全,渗透测试,自动化办公,python全自动办公,Windows系统激活,新手学电脑,IT技术,Rust,Rust编程,黑客技术,黑客,红客,honker,hack,hacker">
-	<title>[Linux基础]-2-内容读取命令 - Hack萌妹 - HackMM.COM</title>
+	<title>[Linux基础]-3-文件查找命令 - Hack萌妹 - HackMM.COM</title>
 	<link rel="shortcut icon" type="image/x-icon" href="../logo/favicon.png">
 	<link rel="stylesheet" type="text/css" href="../css/basic.css">
 	<link rel="stylesheet" type="text/css" href="../css/text.css">
@@ -90,32 +90,67 @@
 			<!-- 文章区 -->
 			<article class="text-container">
 				<header class="text-header">
-					<h1>[Linux基础]-2-内容读取命令</h1>	
+					<h1>[Linux基础]-3-文件查找命令</h1>	
 				</header>
 				<section class="text-body">
 					<h2>引言</h2>
-					<p>这篇文章记录6个和文件内容读取相关的常用Linux命令，也是Linux中最使用频率最高的几个文件内容读取命令。</p>
+					<p>这篇文章记录常用的4个和文件查找相关的Linux命令，也是Linux中最使用频率最高的几个文件查找命令。</p>
 					<!-- 目录 -->
 					<h2>文章目录</h2>
 					<ul class="contents">	
-						 <li><a href="#Content-read-1">0×1.cat命令</a></li>
-						 <li><a href="#Content-read-2">0×2.more命令</a></li>
-						 <li><a href="#Content-read-3">0×3.less命令</a></li>
-						 <li><a href="#Content-read-4">0×4.head命令</a></li>
-						 <li><a href="#Content-read-5">0×5.tail命令</a></li>
-						 <li><a href="#Content-read-6">0×6.kate命令</a></li>
+						 <li><a href="#File-search-1">0×1.which命令</a></li>
+						 <li><a href="#File-search-2">0×2.whereis命令</a></li>
+						 <li><a href="#File-search-3">0×3.locate命令</a></li>
+						 <li><a href="#File-search-4">0×4.find命令</a></li>
 					 </ul>
 					<!-- /目录 -->
 
 					<!-- 正文 -->
-					<h2 id="Content-read-1">0×1.cat命令</h2>
+					<h2 id="File-search-1">0×1.which命令</h2>
 
-					<p>cat命令能够用来显示文本文件中内容，还可以用来创建文本文件并且写入数据，cat命令有两个常用参数：</p>
+					<p>which会在系统的$PATH中搜索某个系统命令的位置，并仅返回第一个搜索到的结果。</p>
+					<p>which命令示例：</p>
+					<!--bash-->
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="mm" 
+					     data-host="hackmm.com" 
+					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					which man #查找man命令所在位置
+					which ls #查找ls命令所在位置，因为ls是终端内置命令，所以不会有路径
+					</code>
+					</pre>
+
+					<h2 id="File-search-2">0×2.whereis命令</h2>
+
+					<p>whereis命令只搜索二进制文件（参数-b），man说明文件（参数-m）和源代码文件（参数-s），如果省略参数，则返回所有信息。</p>
+
+					<p>whereis命令示例：</p>
+					<!--bash-->
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="mm" 
+					     data-host="hackmm.com" 
+					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					whereis find #搜索find程序的二进制文件，说明文件以及源代码文件
+					whereis -b find #仅搜索find程序的二进制文件
+					whereis -m find #仅搜索find程序的说明文件
+					whereis -s find #仅搜索find程序的源代码文件
+					</code>
+					</pre>
+
+					<h2 id="File-search-3">0×3.locate命令</h2>
+
+					<p>locate同whereis一样，依赖于程序自建的数据库查询，在Archlinux中，默认没有locate这个命令，需要手动安装（sudo pacman -S locate），并且在安装之后，需要手动建立一次本地数据库（sudo updatedb），因为是基于本地数据库查询，查询到的数据不一定是最新的，想要查询最新的数据，可以使用sudo updatedb命令手动更新本地数据库后再查询，locate常用参数如下：</p>
 					<p class="indent-p">     
-    				-b 对非空输出行号<br>
-					-n 输出所有行号<br>
+    				-l num 查询结果显示num行<br>
+					-r 使用正则运算式做为寻找条件<br>
+					-i 忽略大小写
 					</p>
-					<p>cat命令示例：</p>
+
+					<p>locate命令示例：</p>
 					<!--bash-->
 					<pre class="command-line" 
 						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
@@ -123,29 +158,53 @@
 					     data-host="hackmm.com" 
 					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
 					<code class="language-bash">
-					cat hackmm #一次性显示hackmm中的内容
-					cat -b hackmm #显示hackmm中的内容，在非空行前面添加行号
-					cat -n hackmm #显示hackmm中的内容，对所有行都添加行号
-					cat hackmm hk1 > hk2 #将将hackmm和hk1中的内容合并，写入hk2文件中
-					cat -b hackmm hk1 > hk2 #将hackmm和hk1中的内容合并，并且非空行添加上行号，写入hk2文件中
-					cat -n hackmm hk1 > hk2 #将hackmm和hk1中的内容合并，每一行都添加上行号，写入hk2文件中
-					cat > hackmm << exit #从键盘读取输入，直到读取到exit结束输入，将输入的内容写入hackmm
-					cat >> hackmm << exit #从键盘读取输入，直到读取到exit结束输入，将输入的内容追加写入hackmm
-					tac hackmm #反向读取hackmm中的内容
-					tac >> hackmm << 111 #上面的规则对反向tac同样适用，这里不再赘述
+					locate -l 5 find #查找包含find名称的文件，仅显示查询结果的前5行
+					locate -r 'hack...rs' #使用正则表达式，查找hack和rs中间仅有三个字符的文件
+					locate -i /etc/ssh #查找/etc/下ssh开头的文件，忽略大小写
 					</code>
 					</pre>
 
+					<h2 id="File-search-4">0×4.find命令</h2>
 
-					<h2 id="Content-read-2">0×2.more命令</h2>
-
-					<p>more命令用来显示文件中的内容，不同于cat的是，more遇到大文件时会分屏显示，不会一次性显示完所有内容，使用者可以按回车或空格显示剩下的内容，按回车会一行一行往下显示，按空格会一次往下显示一页内容，按b键可以往回显示一页内容，常用参数如下：</p>
+					<p>find命令可以用来遍历磁盘查找文件，也是功能最全面的一个文件查找命令，下面是find命令常用参数：</p>
 					<p class="indent-p">     
-    				+n 从笫 n 行开始显示<br>
-					-n 定义屏幕大小为n行<br>
-					q 退出more
+    				-exec 将find命令的查询结果一条条传输给-exec后面的命令执行。格式为"-exec 命令 {} \;"，{}是一个占位符号，代表find查找出来的每一条结果逐个代入这个位置执行，注意{}和\;之间的空格。<br>
+					-ok 和-exec的作用相同，但ok执行需要用户确认。<br>
+					-depth 在查找文件时，会优先查找当前目录中的文件，然后再去其子目录中查找。<br>
+					-name 按照文件名查找文件。<br>
+					-perm 按照文件权限来查找文件。<br>
+					-prune 使用这一选项可以使find命令不在当前指定的目录中查找，如果同时使用了-depth选项，那么-prune选项将被find命令忽略。<br>
+					-user 按照文件属主来查找文件。<br>
+					-group 按照文件所属的组来查找文件。<br>
+					-mtime -n +n 按照文件的修改时间来查找文件，-n表示文件更改时间距现在n天以内，+n表示文件更改时间距现在n天以前。find命令还有-atime（访问时间）和-ctime（创建时间）选项，它们都和-mtime选项相似。 <br>
+					-nogroup 查找无有效所属组的文件，即该文件所属的组在/etc/groups中不存在。<br>
+					-nouser 查找无有效属主的文件，即该文件的属主在/etc/passwd中不存在。<br>
+					-type 查找某一类型的文件，诸如：<br>
+					b - 块设备文件。<br>
+					d - 目录。<br>
+					c - 字符设备文件。<br>
+					p - 管道文件。<br>
+					l - 符号链接文件。<br>
+					f - 普通文件。<br>
+					s - socket文件<br>
+					-size n[cwbkMG] : 文件大小 为 n 个由后缀决定的数据块。其中后缀为：<br>
+					b: 代表 512 位元组的区块（如果用户没有指定后缀，则默认为 b）<br>
+					c: 表示字节数<br>
+					k: 表示 kilo bytes （1024字节）<br>
+					w: 字 （2字节）<br>
+					M:兆字节（1048576字节）<br>
+					G: 千兆字节 （1073741824字节）<br>
+					-depth 在查找文件时，首先查找当前目录中的文件，然后再在其子目录中查找。<br>
+					-delete (删除)<br>
+					-maxdepth 查找最大目录层数 如 1，即只查找一层目录<br>
+					-iname 按名称搜索无论大小写<br>
+					-mount 在查找文件时不跨越文件系统mount点。<br>
+					-o 是或者的意思<br>
+					-a 是而且的意思<br>
+					-not 是相反的意思
 					</p>
-					<p>more命令示例：</p>
+
+					<p>find命令示例：</p>
 					<!--bash-->
 					<pre class="command-line" 
 						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
@@ -153,97 +212,27 @@
 					     data-host="hackmm.com" 
 					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
 					<code class="language-bash">
-					more hackmm #一般用法，可以一页一页显示文件中的内容
-					more +3 hackmm #从第3行开始显示文件中的内容
-					more -5 hackmm #将显示窗口调整成5行，每次只能显示5行内容
-					more +3 -5 #从第3行开始显示，每次显示5行内容
-					ls -l | more -3 #将ls -l命令的结果发送给more读取，每次显示3行ls -l命令的结果
+					find . -name '*.rs' #按名字来查找，查找当前目录中所有.rs结尾的文件
+					find /etc/ssh -name 'sshd_config' #查找/etc/ssh目录中名字叫做sshd_config的文件
+					find . -name '[0-9]*.rs' #查找当前目录中以数字0到9开头的并且后缀是.rs的文件
+					find . -perm 777 #查找当前目录下权限是777的文件
+					find . -perm 777 -name '*.rs' #查找当前目录下权限是777并且后缀是.rs的文件
+					find . -not \( -name '*.sample' -o -name '*.rs' \)  #查找当前目录下不以.sample或.rs结尾的文件，两个括号用\转义
+					find . -name 'hk*' -type f #查找当前目录下以hk开头的普通文件
+					find . -not -type d #查找当前目录中非目录文件
+					find . ! -type d #同上!符号等同于-not
+					find . -nouser #查找当前目录下无用户名的文件，系统允许存在有uid但无用户名的文件，就属于这一类的查询结果
+					find . -user 19999 -group 9999 #查找当前目录下用户名是19999，组是9999的文件
+					find . -size +100M #查找当前目录下大于100M的文件
+					find . -size +100M -exec du -sh {} \; #查找当前目录下大于100M的文件，并用du -sh命令来分别显示他们的大小
+					find . -depth -mtime -3 -ok rm -r {} \; #查找当前目录下修改时间3天内的文件，并且用rm命令删除他们，删除时候提示，如果用户输入y回车就会被删除
+					find . -depth -mtime +3 -ok rm -r {} \; #+3代表三天之前，-3代表三天之内，其他同上
+					find . -name 'hackmm' -delete #查找当前目录下叫做hackmm的文件，找到之后直接删除
+					find . -iname 'HK2' # 不区分大小写，查找当前目录下叫做HK2的文件，意味着hk2，Hk2，HK2，hK2都会被匹配到
+					find . -maxdepth 3 -name '*.rs'  #查找当前目录下，名字以.rs结尾的文件，但只递归查找3层子目录
 					</code>
 					</pre>
 
-
-					<h2 id="Content-read-3">0×3.less命令</h2>
-
-					<p>less同more一样，也提供分页显示文件内容的功能，相比more，less的搜索功能更加强大，下面是less命令的常用参数：</p>
-					<p class="indent-p">     
-    				-i 忽略搜索时的大小写<br>
-					-N 显示每行的行号<br>
-					-s 显示连续空行为一行<br>
-					/字符串：向下搜索“字符串”的功能<br>
-					?字符串：向上搜索“字符串”的功能<br>
-					n：向下重复前一个搜索（配合/和?搜索语法使用）<br>
-					N：向上重复前一个搜索（配合/和?搜索语法使用）
-					</p>
-					<p>less命令示例：</p>
-					<!--bash-->
-					<pre class="command-line" 
-						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
-					     data-user="mm" 
-					     data-host="hackmm.com" 
-					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
-					<code class="language-bash">
-					less -iN hackmm #在使用/和?搜索时，忽略大小写，并且显示每行的行号
-					</code>
-					</pre>
-
-					<h2 id="Content-read-4">0×4.head命令</h2>
-
-					<p>head命令用来显示文件开头或者结尾指定行数，用在只需读取文件前几行或后几行的场景，下面是head命令常用参数：</p>
-					<p class="indent-p">     
-    				-n [num] 显示文件开头num行<br>
-    				-n [-num] 显示到文件结尾倒数num-1行<br>
-    				-c [num] 显示文件开头num个字节<br>
-    				-c [-num] 显示到文件结尾第num-1个字节
-					</p>
-					<p>head命令示例：</p>
-					<!--bash-->
-					<pre class="command-line" 
-						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
-					     data-user="mm" 
-					     data-host="hackmm.com" 
-					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
-					<code class="language-bash">
-					head -n 3 hackmm #显示hackmm前三行
-					head -n -3 hackmm #显示到hackmm倒数第四行
-					head -c 8 hackmm #显示hackmm前8个字节
-					head -c -3 hackmm #显示到hackmm倒数第4个字节
-					</code>
-					</pre>
-
-					<h2 id="Content-read-5">0×5.tail命令</h2>
-
-					<p>tail可以用来显示文件最后几行，下面是tail命令常用参数：</p>
-					<p class="indent-p">     
-    				-f 监听模式读取（用于监控文件新增内容）<br>
-    				-n [num] 从文件末尾，向前读取num行
-					</p>
-					<p>tail命令示例：</p>
-					<!--bash-->
-					<pre class="command-line" 
-						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
-					     data-user="mm" 
-					     data-host="hackmm.com" 
-					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
-					<code class="language-bash">
-					tail -n hackmm #读取hackmm最后3行
-					tail -f hackmm #持续监听读取hackmm文件的新内容，如果这个时候向hackmm写入新数据，就会被tail读取到
-					</code>
-					</pre>
-
-					<h2 id="Content-read-6">0×6.kate命令</h2>
-
-					<p>kate是图形界面下的一个软件，可以用它直接打开文本文件：</p>
-					<!--bash-->
-					<pre class="command-line" 
-						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
-					     data-user="mm" 
-					     data-host="hackmm.com" 
-					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
-					<code class="language-bash">
-					kate hackmm #使用kate打开hackmm
-					</code>
-					</pre>
-					<p>除了kate外，还有很多图形界面下的文本编辑器都可以使用相同的方法打开文件，这里不再赘述。</p>
 
 					<!-- /正文 -->
 
@@ -251,7 +240,7 @@
 					<p>
 						*转载请注明来自:<a title="HackMM.COM" href="https://www.HackMM.com" target="_blank">HackMM.COM</a>
 					</p>
-					<p>*原文连接:<a title="[Linux基础]-2-内容读取命令" href="https://www.HackMM.com/mm/Linux-basic-2.html" target="_blank">https://www.HackMM.com/mm/Linux-basic-2.html</a></p>
+					<p>*原文连接:<a title="[Linux基础]-3-文件查找命令" href="https://www.HackMM.com/mm/Linux-basic-3.html" target="_blank">https://www.HackMM.com/mm/Linux-basic-3.html</a></p>
 				</footer>
 			</article>
 			<!-- /文章区 -->	
