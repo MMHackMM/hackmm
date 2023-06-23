@@ -22,7 +22,7 @@
 #content .tags,
 #content .recommend{
 	font-size: 18px;
-	border: 1px solid #1b9854;
+	border: 1px solid rgb(255, 105, 180);
 	border-radius: 8px;
 	padding: 8px;
 	margin-bottom: 10px;
@@ -34,7 +34,7 @@
 	display: block;
 	height: 35px;
 	line-height: 35px;
-	background-image: linear-gradient(90deg,rgb(30, 166, 92) 0%,black 50%);
+	background-image: linear-gradient(90deg,rgb(255, 105, 180) 0%,black 50%);
 	border-radius: 6px;
 	font-size: 22px;
 	font-weight: normal;
@@ -143,13 +143,13 @@
 }
 #content .sections .sections-title h2{
 	display: inline-block;
-	border-bottom: solid 2px #1ea65c;
+	border-bottom: solid 2px rgb(255, 105, 180);
 	font-size: 24px;
 	color: #c7c5c5;
 	letter-spacing: 1.2px;
 }
 #content .sections .article{
-	border: 1px solid #1b9854;
+	border: 1px solid rgb(255, 105, 180);
 	border-radius: 6px;
 	margin-bottom: 10px;
 	padding: 10px;
@@ -158,7 +158,7 @@
 	background-color: #0c0c0c;
 }
 #content .article header{
-	border-left: 4px solid #1ea65c;
+	border-left: 4px solid rgb(255, 105, 180);
 }
 #content .article header h1{
 	letter-spacing: 1.2px;
@@ -188,7 +188,7 @@
 	border-radius: 6px;
 	font-size: 20px;
 	margin-left: 16px;
-	border: 1.6px solid #1ea65c;
+	border: 1.6px solid rgb(255, 105, 180);
 }
 #content .article section a:hover{
 	color: #fff;
@@ -211,7 +211,7 @@
 	text-align: center;
 	border-radius: 4px;
 	color: #fff;
-	background-color:#1ea65c;
+	background-color:rgb(255, 105, 180);
 }
 #content .sections .article-all
 {
@@ -221,7 +221,7 @@
 	text-align: center;
 	font-size: 18px;
 	border-radius: 8px;
-	background-color: #1ea65c;
+	background-color: rgb(255, 105, 180);
 	margin: 0 auto;
 }
 #content .sections .article-all a{
@@ -275,7 +275,7 @@
 }
 #content .sitemap .sitemap-sub-ul>li{
 	display: block;
-	border: 1px solid #1ea65c;
+	border: 1px solid rgb(255, 105, 180);
 	border-radius: 6px;
 	text-align: center;
 	width: 180px;
@@ -285,7 +285,7 @@
 	letter-spacing: 1.2px;
 }
 #content .sitemap .sitemap-sub-ul>li:hover{
-	background-color: #1ea65c;
+	background-color: rgb(255, 105, 180);
 }
 #content .sitemap .sitemap-sub-ul>li a{
 	display: block;
@@ -306,8 +306,8 @@
 }
 #content .col-name{
 	display: inline-block;
-	border-left: 2px solid #1ea65c;
-	border-bottom: 2px solid #1ea65c;
+	border-left: 2px solid rgb(255, 105, 180);
+	border-bottom: 2px solid rgb(255, 105, 180);
 	border-radius: 4px;
 	color: #c7c5c5;
 	padding: 10px;
@@ -318,7 +318,7 @@
 }
 #content .col-content a{
 	display: block;
-	border-left: 1px solid  #1ea65c;
+	border-left: 1px solid  rgb(255, 105, 180);
 	margin: 0 10px 0 0;
 	padding: 6px 0 6px 6px;
 	border-radius: 4px;

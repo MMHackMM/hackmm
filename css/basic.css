@@ -95,12 +95,12 @@ div,li{  /*border，padding不扩充宽高*/
 /**当鼠标点击后，在跳转的页面导航标签上添加active类，这样这个导航标签就会被选中**/
 #nav .nav-links li:hover,
 #nav .nav-links .active{
-	border-bottom: 1.2px solid rgb(222, 246, 7);
+	border-bottom: 1.2px solid rgb(255, 105, 180);
 	background-color: #222;
 }
 /**导航，当鼠标移上去后，字体放大**/
 #nav .nav-links .link-word:hover{
-	color: #fff;
+	color: rgb(255, 105, 180);
 	font-size: 23px;
 }
 #nav .link-img{
