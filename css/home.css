@@ -20,7 +20,8 @@
 }
 #content .about,
 #content .tags,
-#content .recommend{
+#content .recommend,
+#content .aside_img {
 	font-size: 18px;
 	border: 1px solid rgb(255, 105, 180);
 	border-radius: 8px;
@@ -30,7 +31,8 @@
 }
 #content .about h2,
 #content .tags h2,
-#content .recommend h2{
+#content .recommend h2,
+#content .aside_img h2 {
 	display: block;
 	height: 35px;
 	line-height: 35px;
@@ -93,9 +95,12 @@
 	color:#999;
 }
 #content .tags ul,
-#content .recommend ul{
+#content .recommend ul,
+#content .aside_img img {
 	margin: 6px 0 0 20px;
 }
+
+
 
 #content .tags li{
 	float: left;
