@@ -126,13 +126,6 @@
 					cat hackmm #一次性显示hackmm中的内容
 					cat -b hackmm #显示hackmm中的内容，在非空行前面添加行号
 					cat -n hackmm #显示hackmm中的内容，对所有行都添加行号
-					cat hackmm hk1 > hk2 #将将hackmm和hk1中的内容合并，写入hk2文件中
-					cat -b hackmm hk1 > hk2 #将hackmm和hk1中的内容合并，并且非空行添加上行号，写入hk2文件中
-					cat -n hackmm hk1 > hk2 #将hackmm和hk1中的内容合并，每一行都添加上行号，写入hk2文件中
-					cat > hackmm << exit #从键盘读取输入，直到读取到exit结束输入，将输入的内容写入hackmm
-					cat >> hackmm << exit #从键盘读取输入，直到读取到exit结束输入，将输入的内容追加写入hackmm
-					tac hackmm #反向读取hackmm中的内容
-					tac >> hackmm << 111 #上面的规则对反向tac同样适用，这里不再赘述
 					</code>
 					</pre>
 
