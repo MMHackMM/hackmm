@@ -104,8 +104,9 @@
 						 <li class="subli"><a href="#Linux-vim-4">b.删除文字操作</a></li>
 						 <li class="subli"><a href="#Linux-vim-5">c.复制和粘贴操作</a></li>
 						 <li class="subli"><a href="#Linux-vim-6">d.字符替换操作</a></li>
-						 <li><a href="#Linux-vim-7">0×3.Vim编辑器底行模式下常用命令</a></li>
-						 <li><a href="#Linux-vim-8">0×4.Vim编辑器可视化模式（Visual Mode）常用命令</a></li>
+						 <li class="subli"><a href="#Linux-vim-7">e.字母大小写转换</a></li>
+						 <li><a href="#Linux-vim-8">0×3.Vim编辑器底行模式下常用命令</a></li>
+						 <li><a href="#Linux-vim-9">0×4.Vim编辑器可视化模式（Visual Mode）常用命令</a></li>
 					 </ul>
 					<!-- /目录 -->
 
@@ -247,7 +248,20 @@
 					<p>[ctrl]+[g] 在文本底部显示文件名、是否修改、文件是否为只读、有多少行、当前光标所在位置占%多少，显示如下：<br>
 					"filename" [Modified][readonly] line 30 of 187 16% col 15</p>
 
-					<h2 id="Linux-vim-7">0×3.Vim编辑器底行模式下常用命令</h2>
+					<h3 id="Linux-vim-7">e.字母大小写转换</h3>
+
+					<p class="indent-p">
+					在命令模式中，将全文的小写字母转换成大写字母输入ggguG，转小写输入gggUG；<br>
+					在命令模式中，转换当前光标所在位置到空格的单词为大写，输入gUw，转小写，输入guw；<br>
+					在命令模式中，转换当前光标所在位置后面五个单词单词为大写，输入gU5w，转成小写，输入gu5w；<br>
+					在命令模式中，转换当前光标所在行为小写，输入guu，反之输入gUU就能将当前行转换成大写；<br>
+					在命令模式中，转换光标所谓位置包括当前行往下3行为小写，输入3guu，反之输入3gUU就能将3行转换成大写；<br>
+					在命令模式中，转换光标位置到文章末尾为大写输入gUG，反之，转换光标位置到文章开头为大写输入gUgg；<br>
+					在命令模式中，转换光标位置到文章末尾为小写输入guG，反之，转换光标位置到文章开头为小写输入gugg；<br>
+					在命令模式中，转换光标位置到行首为小写输入gu0，反之，到行尾输入gu$；<br>
+					</p>
+
+					<h2 id="Linux-vim-8">0×3.Vim编辑器底行模式下常用命令</h2>
 
 					<p>末行模式常用命令（:）</p>
 					<p class="indent-p">
@@ -257,9 +271,10 @@
 						:10,$s/is/was/g 文字替换操作，从当前文件的第10行开始搜索($s)，到最后一行(/g)，将"is"替换成"was"；
 						<br>
 						:%s/is/was/g 如果是从第一行到最后一行，直接使用%s即可，这一句的意思是从第一行到行末，将"is"替换成"was"；
+						:%s/i/I/g 将全文中的小写i替换成大写I
 					</p>
 
-					<h2 id="Linux-vim-8">0×4.Vim编辑器可视化模式（Visual Mode）常用命令</h2>
+					<h2 id="Linux-vim-9">0×4.Vim编辑器可视化模式（Visual Mode）常用命令</h2>
 					<p>Vim编辑器的可视化模式（Visual Mode）允许使用光标选择一个高亮区域，然后对这个区域中的内容进行编辑操作。</p>
 					<p>假设我用vim打开一个文件，里面的内容如下，光标在红色1的位置，现在可以通过按下"Ctrl+v"进入可视化编辑模式的块模式：</p>
 					<p class="indent-p">
