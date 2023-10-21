@@ -106,6 +106,7 @@
 						 <li class="subli"><a href="#Linux-vim-7">e.字母大小写转换</a></li>
 						 <li><a href="#Linux-vim-8">0×3.Vim编辑器底行模式下常用命令</a></li>
 						 <li><a href="#Linux-vim-9">0×4.Vim编辑器可视化模式（Visual Mode）常用命令</a></li>
+						 <li><a href="#Linux-vim-10">0×5.Vim创建加密文件</a></li>
 					 </ul>
 					<!-- /目录 -->
 
@@ -307,13 +308,29 @@
 						<span style="color: #ff0000;"><strong>&nbsp;&nbsp;&nbsp;&nbsp;4</strong></span> file edit view scrollback bookmarks
 					</p>
 					<p>将选中区域使用rot13算法加密实例：</p>
-					<p>选中一个矩形区域，按键盘上的小写"g"再输入一个"?"，选中的区域将被使用rot13加密；解密的方法就是再对这个区域执行一次加密；</p>
+					<p>rot13算法是一种简易的替换式密码算法，在一些英文网络论坛用作隐藏八卦、妙句、谜题解答以及某些脏话的简单工具，目的是逃过版主或管理员的匆匆一瞥，rot13加密在vim中可以这样操作实现，首先使用可视化模式，选中一个矩形区域，按键盘上的小写"g"再输入一个"?"，选中的区域将被使用rot13加密；解密的方法就是再对这个区域执行一次加密；</p>
 					<p class="indent-p">
 						1 <span style="color: #ff0000;"><strong>svyr rqvg ivrj </strong></span>scrollback bookmarks<br>
 						2 <span style="color: #ff0000;"><strong>svyr rqvg ivrj </strong></span>scrollback bookmarks<br>
 						3 <span style="color: #ff0000;"><strong>svyr rqvg ivrj </strong></span>scrollback bookmarks<br>
 						4 file edit view scrollback bookmarks
 					</p>
+
+					<h2 id="Linux-vim-10">0×5.Vim创建加密文件</h2>
+					<p>可以在创建文件时添加参数-x来创建加密文件，所有被加密的文件打开时需要输入密码，请看下面的实例：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="mm" 
+					     data-host="hackmm.com" 
+					     data-output="2,3,4,5"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					vim -x jiami.txt
+					:set cm?    #在底行模式中，查看当前使用的加密算法，目前常见的加密算法有zip、blowfish、blowfish2（默认）
+					:set cm=blowfish2  #手动指定加密算法
+					:X   #重新设置秘钥（或set key=password）
+					:set key=  #清除加密
+					</code>
+					</pre>
 
 					<!-- /正文 -->
 
