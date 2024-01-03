@@ -104,6 +104,7 @@
 						 <li><a href="#Content-read-4">0×4.head命令</a></li>
 						 <li><a href="#Content-read-5">0×5.tail命令</a></li>
 						 <li><a href="#Content-read-6">0×6.kate命令</a></li>
+						 <li><a href="#Content-read-7">0×7.视频演示</a></li>
 					 </ul>
 					<!-- /目录 -->
 
@@ -159,7 +160,6 @@
 
 					<p>less同more一样，也提供分页显示文件内容的功能，相比more，less的搜索功能更加强大，下面是less命令的常用参数：</p>
 					<p class="indent-p">     
-    				-i 忽略搜索时的大小写<br>
 					-N 显示每行的行号<br>
 					-s 显示连续空行为一行<br>
 					/字符串：向下搜索“字符串”的功能<br>
@@ -175,7 +175,7 @@
 					     data-host="hackmm.com" 
 					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
 					<code class="language-bash">
-					less -iN hackmm #在使用/和?搜索时，忽略大小写，并且显示每行的行号
+					less -N hackmm #在使用/和?搜索时，显示每行的行号
 					</code>
 					</pre>
 
@@ -184,9 +184,7 @@
 					<p>head命令用来显示文件开头或者结尾指定行数，用在只需读取文件前几行或后几行的场景，下面是head命令常用参数：</p>
 					<p class="indent-p">     
     				-n [num] 显示文件开头num行<br>
-    				-n [-num] 显示到文件结尾倒数num-1行<br>
     				-c [num] 显示文件开头num个字节<br>
-    				-c [-num] 显示到文件结尾第num-1个字节
 					</p>
 					<p>head命令示例：</p>
 					<!--bash-->
@@ -197,9 +195,7 @@
 					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
 					<code class="language-bash">
 					head -n 3 hackmm #显示hackmm前三行
-					head -n -3 hackmm #显示到hackmm倒数第四行
 					head -c 8 hackmm #显示hackmm前8个字节
-					head -c -3 hackmm #显示到hackmm倒数第4个字节
 					</code>
 					</pre>
 
@@ -236,7 +232,17 @@
 					kate hackmm #使用kate打开hackmm
 					</code>
 					</pre>
-					<p>除了kate外，还有很多图形界面下的文本编辑器都可以使用相同的方法打开文件，这里不再赘述。</p>
+					<p>除了kate外，还有很多图形界面下的文本编辑器例如xfce下的xed，gnome下的gedit，都可以使用相同的方法打开文件，这里不再赘述。</p>
+
+					<h2 id="Content-read-7">0×7.视频演示</h2>
+
+					<p>点击下方视频标题，可以进入B站观看高清版本</p>
+					<p>【第21天】Linux基础-21-Linux中查看文本内容的6种方式-大一女新生挑战一年精通网络安全-渗透测试-黑客技术-Linux基础，我无所畏惧</p>
+					<iframe src="//player.bilibili.com/player.html?aid=665635363&bvid=BV1ua4y1q7Uh&cid=1392941521&p=1&autoplay=0" allowfullscreen="allowfullscreen" width="100%" height="500" scrolling="no" frameborder="0" > </iframe>
+
+					<p>第一篇文章中演示的虚拟机的下载可以通过我这个uc网盘去下载，里面包含了很多现成的系统镜像，还有虚拟机的激活码，也可以去官方下载，千万别去其他地方下精简版，很多问题都出在这里。网盘包含了最新的Windows+激活软件，流行的Linux镜像，会持续更新。下面两个网盘内容一致</p>
+					<p>*「虚拟机全套软件+ISO镜像文件+持续更新」夸克：<a title="虚拟机全套软件+ISO镜像文件" style="color: rgb(4,181,150);" href="https://pan.quark.cn/s/5b959e662982" target="_blank">点击打开</a></p>
+					<p>*「虚拟机全套软件+ISO镜像文件+持续更新」UC:<a title="虚拟机全套软件+ISO镜像文件" style="color: rgb(4,181,150);" href="https://drive.uc.cn/s/eb63654987fb4" target="_blank">点击打开</a> 密码：8s6H</p>
 
 					<!-- /正文 -->
 
