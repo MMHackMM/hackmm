@@ -39,8 +39,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0,user-scalable=no">
 	<meta name="description" content="HackMM,我们的征途,是星辰大海.">
 	<meta name="author" content="HackMM.COM-月刃">
-	<meta name="keywords" content="hackmm,HackMM,hackmm.com,Hack萌妹,黑客萌妹,黑客学习,Windows技术,Linux技术,Archlinux,Linux软件,漏洞挖掘,网络安全,渗透测试,自动化办公,python全自动办公,Windows系统激活,新手学电脑,IT技术,Rust,Rust编程,黑客技术,黑客,红客,honker,hack,hacker">
-	<title>[Linux基础]-5-用户和组管理 - Hack萌妹 - HackMM.COM</title>
+	<meta name="keywords" content="hackmm,HackMM,hackmm.com,Hack萌妹,黑客萌妹,黑客学习,Windows技术,Linux技术,Archlinux,Linux软件,漏洞挖掘,网络安全,渗透测试,自动化办公,python全自动办公,Windows系统激活,新手学电脑,IT技术,Rust,Rust编程,黑客技术,黑客,红客,honker,hack,hacker,网络安全,信息安全,网络安全学习,计算机小白,网安入门,网络安全入门,渗透测试,黑客技术,网络基础入门,操作系统,新手学电脑,小白学电脑,hack学习,hack入门,Windows基础,linux基础,Archlinux基础,Rust基础,Rust入门,Rust编程基础,黑客入门,Ubuntu入门,Manjaro,Endeavouros,红帽系统,centos基础学习,Rocky系统基础,Linux基础命令,Windows批处理,Windows安全,Linux安全,Kali基础,Kali渗透测试,KaliLinux,BlackArch,Github,加密解密,具体数学,线性代数,离散数学,红队攻防,蓝队攻防,黑客靶场练习,黑客靶场,黑客实战,hack实战,hack编程,黑客编程">
+	<title>[Linux基础]-5-软件的安装与管理 - Hack萌妹 - HackMM.COM</title>
 	<link rel="shortcut icon" type="image/x-icon" href="../logo/favicon.png">
 	<link rel="stylesheet" type="text/css" href="../css/basic.css">
 	<link rel="stylesheet" type="text/css" href="../css/text.css">
@@ -90,399 +90,584 @@
 			<!-- 文章区 -->
 			<article class="text-container">
 				<header class="text-header">
-					<h1>[Linux基础]-5-用户和组管理</h1>	
+					<h1>[Linux基础]-5-软件的安装与管理</h1>	
 				</header>
 				<section class="text-body">
 					<h2>引言</h2>
-					<p>这篇文章主要介绍Linux中用户和用户组的基础知识；包括如何使用命令创建和删除用户、创建和删除用户组，以及如何有效的管理用户和用户组。</p>
+					<p>这篇文章介绍Linux五个运用最普遍的软件包管理器。使用Rocky（RHEL系）、Ubuntu（Debian系）、EndeavourOS（Arch系）这三个不同的Linux发行版，分别介绍rpm、yum、dnf、dpkg、apt-get和pacman的使用方法。</p>
 					<!-- 目录 -->
-					<h2>文章目录</h2>
-					<ul class="contents">	
-						 <li><a href="#Linux-users-and-groups-1">0×1.Linux用户信息文件和密码文件</a></li>
-						 <li><a href="#Linux-users-and-groups-2">0×2.Linux用户组信息文件和组密码文件</a></li>
-						 <li><a href="#Linux-users-and-groups-3">0×3.Linux用户组管理</a></li>
-						 <li class="subli"><a href="#Linux-users-and-groups-4">a.如何创建组</a></li>
-						 <li class="subli"><a href="#Linux-users-and-groups-5">b.如何重命名组</a></li>
-						 <li class="subli"><a href="#Linux-users-and-groups-6">c.如何删除组</a></li>
-						 <li><a href="#Linux-users-and-groups-7">0×4.Linux用户管理</a></li>
-						 <li class="subli"><a href="#Linux-users-and-groups-8">a.如何添加用户</a></li>
-						 <li class="subli"><a href="#Linux-users-and-groups-9">b.如何重命名用户</a></li>
-						 <li class="subli"><a href="#Linux-users-and-groups-10">c.如何锁定和解锁用户</a></li>
-						 <li class="subli"><a href="#Linux-users-and-groups-11">d.如何删除用户</a></li>
-						 <li class="subli"><a href="#Linux-users-and-groups-12">e.修改用户属组</a></li>
+					<ul class="contents">
+						 <li><a href="#Linux-packages-1">0×1.RPM、DPKG、Pacman软件管理机制浅析</a></li>
+						 <li class="subli"><a href="#Linux-packages-1.1">0×1.1.Linux如何更换软件源</a></li>
+						 <li><a href="#Linux-rpm-2">0×2.使用rpm命令安装卸载软件</a></li>
+						 <li><a href="#Linux-yum-3">0×3.使用yum安装卸载软件</a></li>
+						 <li><a href="#Linux-dnf-4">0×4.使用dnf安装卸载软件</a></li>
+						 <li><a href="#Linux-dpkg-5">0×5.使用dpkg命令安装卸载软件</a></li>
+						 <li><a href="#Linux-apt-get-6">0×6.使用apt-get安装卸载软件</a></li>
+						 <li><a href="#Linux-pacman-7">0×7.使用pacman安装卸载软件</a></li>
+						 <li><a href="#Linux-video-8">0×8.视频演示</a></li>
 					 </ul>
 					<!-- /目录 -->
 
 					<!-- 正文 -->
-					<h2 id="Linux-users-and-groups-1">0×1.Linux用户信息文件和密码文件</h2>
 
-					<p>当创建一个用户时，用户的账户信息被保存在用户信息文件中，只有root权限才能修改这个文件的内容，非root用户只能读取其中的内容：</p>
-					<!--bash-->
+					<h2 id="Linux-packages-1">0×1.RPM、DPKG、Pacman软件管理机制浅析</h2>
+
+					<p>RPM(Red hat Package Manage)：是Red Hat公司开发的打包标准，通常以.rpm作为后缀，Linux软件包的命名有一定的规律,一般的结构是"软件名称-版本-适合的系统平台.扩展名"，例如，一个rpm安装包名称是"ansible-test-2.14.9-1.el9.x86_64.rpm"，那么这个软件的名称就是"ansible-test"，软件版本是"2.14.9-1.el9"，适用的平台"x86_64"（x86_64构架）；RPM包可以安装在所有的RHEL系Linux中，例如，Rocky，Fedora等。</p>
+
+					<p>DPKG(Debian Package)：dpkg是Debian系发行版负责管理软件包的初级工具，只有简单的安装、卸载、检查依赖等本地的功能；dpkg封装的包后缀是.deb，例如“sogoupinyin_4.2.1.145_amd64.deb”，“sogoupinyin”是软件的名称，“4.2.1.145”是版本号，“amd64”是这个包的适用平台；deb包可以安装在所有Debian系列系统上，例如，Ubuntu，Kali，Deepin等。</p>
+
+					<p>Pacman：是Arch系列操作系统上的默认包管理器，功能强大能，不仅能够通过软件仓库在线安装，还能够安装本地打包好的软件，在ArchLinux中，本地打包软件的后缀通常是.pkg.tar.zst，例如：“vmware-workstation-17.5.0-2-x86_64.pkg.tar.zst”；</p>
+
+					<p>然而，不论哪种软件管理机制封装的安装包，都存在相关软件的依存问题，比如使用rpm或者dpkg安装软件A，A则需要系统中已经安装好软件B和C，否则A将不能正常安装，这就带来一个非常麻烦的问题，如果A依赖的程序不止两个，而是几百个，这几百个被依赖的程序在安装的过程中，又存在其他的依赖关系，那么手动安装这些依存程序显然就会非常的麻烦。</p>
+
+					<p>所以，为了解决安装软件的依赖关系问题，Yum、Dnf、Apt-get、Pacman这几种自动解决依赖关系的包管理器就被开发了出来。Yum和Dnf是RPM软件管理机制的在线安装方式，适用于RHEL系列Linux；Apt-get是DPKG软件管理机制的在线安装方式，适用于Debian系列Linux；Pacman是Arch系列Linux的原生包管理器；它们都可以自动解决软件的依存问题，当某个需要安装的软件存在依赖软件时，安装程序会自动搜索指定的网络服务器中是否存在这些依存的软件，如果存在，会将这些软件一次性全部安装好。</p>
+
+					<h2 id="Linux-packages-1.1">0×1.1.Linux如何更换软件源</h2>
+					<p>首先来看一下，为什么要更换软件源，因为大多数的Linux的软件仓库都在国外的服务器上，在网络不通达的时候，就可能访问不了，这就会导致我们更新系统或在线安装软件失败；如果遇到了这样的问题，解决它的最好办法就是将软件源更换到国内【<a href="https://developer.aliyun.com/mirror/" target="_blank" alt="阿里云开源镜像站">阿里云开源镜像站</a>】；</p>
+
+					<img src="images/mirror.png" alt="images/mirror.png">
+					<p>上图中， 假设PC连接官方软件源服务器网络不好，那么就可以通过阿里这样的镜像站，因为阿里的网络到官方软件源服务器的网络是通的，所以阿里会缓存所有官方软件源里面的资源到镜像服务器上，这样我们只需要通过阿里镜像服务器去获取软件和更新就行了。</p>
+
+					<p>更换软件源的方法，打开【<a href="https://developer.aliyun.com/mirror/" target="_blank" alt="阿里云开源镜像站">阿里云开源镜像站</a>】，找到自己的Linux操作系统对应的镜像，然后参考步骤就行修改。</p>
+
+					<p>===在没有学习权限之前，下面所有对软件源文件的修改，都暂时使用超级管理员root运行===</p>
+
+					<p>● Ubuntu修改软件源文件示例：</p>
 					<pre class="command-line" 
 						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
-					     data-user="mm" 
+					     data-user="root" 
 					     data-host="hackmm.com" 
-					     data-output="1,3-14"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					     data-output="1-2"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
 					<code class="language-bash">
-					#用户账户信息文件在Linux系统"/etc/passwd"文件中，使用cat查看其内容
-					cat /etc/passwd 
-
-					#这一条是root账户的信息
-					root:x:0:0:root:/root:/bin/bash
-					#...省略部分输出
-					daemon:x:1:1:daemon:/usr/sbin:/bin/sh
-					bin:x:2:2:bin:/bin:/bin/sh
-					sys:x:3:3:sys:/dev:/bin/sh
-					#...省略部分输出
-					#这一条是当前使用的账户信息
-					mm:x:500:500::/home/mm:/bin/bash
+					#sed -i.hackmm参数接受传入一个文件，sed首先会将这个文件复制一份并且添加.hackmm后缀
+					#然后再将 --- {'s|这一部分的内容|替换成这一部分|g'}，在命令中使用|作为分隔符的时候斜杠/不需要用反斜杠\转义
+					sed -e 's|http://cn.archive.ubuntu.com|http://mirrors.aliyun.com|g' -i.hackmm /etc/apt/sources.list
 					</code>
 					</pre>
-					<p>
-					账户信息使用":"分隔，各字段内容解释如下:<br>
-					username:password:uid:gid:userinfo:home:shell<br>
-					拿"mm:x:500:500:hackmm:/home/mm:/bin/bash"举例：<br>
-					<p class="indent-p">
-					* 用户名mm；<br>* 密码并非保存在这个文件中所以用"x"代替；uid是用户ID值，root用户的UID=0，系统用户的UID范围是1-499，其他用户的UID为499-4.29E9+（42亿多个）；<br>* gid是用户的组ID，ID值的分配同UID，mm的UID和GID都是500；<br>* userinfo是用户信息，一般等于用户名或者用户全称，mm的用户全称为hackmm；<br>* home是用户的家目录，mm的家目录是"/home/mm"；<br>* shell是用户加载后执行的shell，默认为/bin/bash；
-					</p>
-					</p>
-					<p>如果有root权限，使用vim修改这个文件，将某个用户的UID和GID全部改成0，比如"mm:x:0:0:hackmm:/home/mm:/bin/bash"，这样"mm"就拥有了root权限，由此可见系统是通过uid和gid来判断用户权限的。</p>
-					<p>在Linux中，用户的账户信息和密码信息是分开保存的，在查看用户账户信息文件的时候，发现密码部分使用"x"隐藏了，实际上，用户的密码是被加密后保存在"/etc/shadow"这个文件中的，这个文件的权限更加严格，只有root权限才能查看和修改它，非root用户是看不到内容的（或者在普通用户权限下使用sudo命令前缀）：</p>
-					<!--bash-->
+
+					<p>由于Rocky还比较新，阿里还没有提供最新的Rocky8和9的镜像缓存，所以下面使用【<a href="https://mirrors.ustc.edu.cn/" target="_blank" alt="中国科大开源软件镜像站">中国科大开源软件镜像站</a>】</p>
+					<p>● Rocky修改软件源文件示例：</p>
 					<pre class="command-line" 
 						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
-					     data-user="mm" 
+					     data-user="root" 
 					     data-host="hackmm.com" 
-					     data-output="1,3-19"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
-					<code class="language-bash">		
-					#查看密码文件的内容
-					sudo vim /etc/shadow
-					root:6e5sGDXdfashsdf32:15453:0:99999:7:::
-					#...省略部分输出
-					mm:md03zQ9RmYDhV:15700:0:99999:7:::
-
-					#上面省略了部分输出，仅保留了root与，当前账户mm的输出，对应的各字段解释如下:
-					#username:password:lastChg:min:max:warm:inactive:expire:flag
-					#拿"root:6e5sGDXdfashsdf32:15453:0:99999:7:::"举例：
-					#username是root
-					#password是"6e5sGDXdfashsdf32"，这是加密后的密码
-					#lastChg：从1970年1月1日起到上次修改密码所经历的天数
-					#min：两次修改密码最小间隔，0为无间隔
-					#max：密码有效天数，99999为永不过期
-					#warm：口令失效前多少天，系统向用户发出警告（默认7天）
-					#inactive：禁止登陆前，用户名还有效的天数
-					#expire：用户禁止登陆的时间
-					#flag：保留域
-					#最后这三个参数在root中并没有使用
-					</code>
-					</pre>
-					<p>在使用Linux桌面发行版的过程中，假如你忘记了开机密码，可以使用一张Linux启动盘（U盘）启动，挂载上你忘记密码的那个系统的分区（假设挂载到U盘系统的/mnt目录下），然后通过vi删除"/mnt/etc/shadow"文件中对应账户的密码字段(或者删除"/mnt/etc/passwd"中对应账户名后面密码字段的那个"x")，都可以达到清空开机密码的目的。</p>
-
-					<h2 id="Linux-users-and-groups-2">0×2.Linux用户组信息文件和组密码文件</h2>
-
-					<p>用户的组信息保存在文件"/etc/group"中,只有root权限才能对此文件作出修改，其他用户只能查看；组密码文件保存在"/etc/gshadow"中，只有root权限才能查看和修改，其他用户无权查看：</p>
-					<!--bash-->
-					<pre class="command-line" 
-						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
-					     data-user="mm" 
-					     data-host="hackmm.com" 
-					     data-output="1,3-19"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					     data-output="1,3,4,6-11,12-13,15-18"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
 					<code class="language-bash">
-					#查看组信息文件中的内容
-					cat /etc/group
+					#查看系统版本命令（或lsb_release -a）
+					more /etc/os-release  
 
-					#root组
-					root:x:0:
-					bin:x:1:bin,daemon
-					daemon:x:2:bin,daemon
-					sys:x:3:bin,adm
-					#...省略部分输出
-					#这是当前用户所在组，当用户被创建时，如果没有指定所属组，将自动创建一个与用户名称相同的组，并将用户划分到这个组下
-					mm:x:500:
+					#针对Rocky8
+					sed -e 's|^mirrorlist=|#mirrorlist=|g' \
+					-e 's|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=https://mirrors.ustc.edu.cn/rocky|g' \
+					-i.hackmm \
+					/etc/yum.repos.d/Rocky-AppStream.repo \
+					/etc/yum.repos.d/Rocky-BaseOS.repo \
+					/etc/yum.repos.d/Rocky-Extras.repo \
+					/etc/yum.repos.d/Rocky-PowerTools.repo
 
-					#用户组信息格式如下:
-					#username:password:GID:g_members
-					#在“mm:x:500:”中
-					#username是mm
-					#password使用x隐藏，组密码单独保存在/etc/gshadow文件中
-					#GID是500，root的gid是0，系统gid从1-499（部分系统是1~1000），用户可以使用的gid从500开始，和UID范围是相同的
-					#g_members:代表在这个组里面的成员列表，用逗号分隔
+					#针对Rocky9
+					sed -e 's|^mirrorlist=|#mirrorlist=|g' \
+					-e 's|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=https://mirrors.ustc.edu.cn/rocky|g' \
+					-i.hackmm \
+					/etc/yum.repos.d/rocky-extras.repo \
+					/etc/yum.repos.d/rocky.repo
+					</code>
+					</pre>
+					<p>以上命令只替换了默认启用的仓库。替换之后请运行 dnf makecache 更新缓存。</p>
+
+					<p>● Archlinux修改软件源文件示例：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#针对Archlinux
+					sed -e 's|^|#|g' -e '1i Server = http://mirrors.aliyun.com/archlinux/$repo/os/$arch' -i.hackmm /etc/pacman.d/mirrorlist
 					</code>
 					</pre>
 
-					<h2 id="Linux-users-and-groups-3">0×3.Linux用户组管理</h2>
-					<p>下面的操作需要root权限或使用sudo命令前缀才能执行。</p>
+					<h2 id="Linux-rpm-2">0×2.使用rpm命令安装卸载软件</h2>
+
+					<p>● 查询软件安装到系统的哪些目录中：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1,3"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#对已安装的软件，通过软件名查询安装到了系统哪些目录中
+					rpm -ql openssh-server
+					#查询rpm软件包，包含哪些文件
+					rpm -qlp openssh-server-8.7p1-34.el9.x86_64.rpm
+					</code>
+					</pre>
+
+					<p>● 查询软件安装需要哪些依赖软件包：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1,3"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#对已安装的软件
+					rpm -qR openssh-server
+					#对软件包
+					rpm -qRp openssh-server-8.7p1-34.el9.x86_64.rpm
+					</code>
+					</pre>
+
+					<p>● 查询某个文件属于哪个软件包：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1,3"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#查询sshd_config这个配置文件属于哪个软件包
+					rpm -qf /etc/ssh/sshd_config
+					openssh-server-8.7p1-34.el9.x86_64
+					</code>
+					</pre>
+
+					<p>● 安装和卸载rpm软件包：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1,3"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#安装ssh服务端
+					rpm -ivh openssh-server-8.7p1-34.el9.x86_64.rpm
+					#卸载ssh客户端，通过rpm卸载软件的时候，能不能卸载的前提条件是被卸载的软件不被其它软件包依赖
+					rpm -evh openssh-server
+					</code>
+					</pre>
 					
-					<h3 id="Linux-users-and-groups-4">a.如何创建组</h3>
-					<p>创建一个随机GID的用户组：</p>
-					<!--bash-->
+					<h2 id="Linux-yum-3">0×3.使用yum安装卸载软件</h2>
+					<p>在我们使用rpm安装软件的包的时候，会出现大量的软件依存关系问题，手动解决十分麻烦，所以yum包管理器被开发出来，用来自动解决软件之间的依存关系，yum默认使用联网安装的方式，从指定的服务器中搜索我们需要安装的软件，如果有依存关系的软件，也会被一并自动安装。</p>
+
+					<p>● yum查找在线仓库中是否存在某软件包：</p>
 					<pre class="command-line" 
 						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
-					     data-user="mm" 
+					     data-user="root" 
 					     data-host="hackmm.com" 
-					     data-output="1,3,4,6"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					     data-output="1,3-8"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
 					<code class="language-bash">
-					#创建一个随机GID的用户组（GID一般是递增的），组名是hackmm1
-					sudo groupadd hackmm1
-
-					#查看刚才创建的用户组
-					sudo cat /etc/group | grep hackmm1
-					hackmm1:x:501: #这是刚才创建的用户组，GID是501
+					#使用search参数查找仓库中是否存在vim程序的安装包
+					yum search vim
+					===== 名称 和 概况 匹配：vim =====
+					vim-X11.x86_64 : The VIM version of the vi editor for the X Window System - GVim
+					vim-common.x86_64 : The common files needed by any version of the VIM editor
+					vim-enhanced.x86_64 : A version of the VIM editor which includes recent : enhancements
+					vim-filesystem.noarch : VIM filesystem layout
+					vim-minimal.x86_64 : A minimal version of the VIM editor
 					</code>
 					</pre>
 
-					<p>创建一个指定GID的用户组：</p>
-					<!--bash-->
+					<p>● yum查询某个软件包详细信息：</p>
 					<pre class="command-line" 
 						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
-					     data-user="mm" 
+					     data-user="root" 
 					     data-host="hackmm.com" 
-					     data-output="1,3,5"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					     data-output="1,3"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
 					<code class="language-bash">
-					#指定GID是1555，组名是hackmm2
-					sudo groupadd -g 1555 hackmm2
-					#查看
-					sudo cat /etc/group | grep hackmm2
-					hackmm2:x:1555:
+					#使用list或者info参数查找系统中是否已经安装了vim
+					yum list vim
+					#如果vim已经安装，显示详细信息
+					yum info vim
 					</code>
 					</pre>
 
-					<p>创建一个系统组：</p>
-					<!--bash-->
+					<p>● yum安装软件：</p>
 					<pre class="command-line" 
 						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
-					     data-user="mm" 
+					     data-user="root" 
 					     data-host="hackmm.com" 
-					     data-output="1,3,5-7,9"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					     data-output="1,3"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
 					<code class="language-bash">
-					#创建系统组,可以使用-g指定GID不指定则系统自动分配
-					sudo groupadd -r SystemHackmm1
-
-					sudo cat /etc/group | grep SystemHackmm1
-					SystemHackmm1:x:495:  #GID范围在1-499的都是系统组（Ubuntu用户是1-1000）
-
-					#指定GID，但是不要和现有GID冲突
-					sudo groupadd -g 496 -r SystemHackmm2
-					groupadd: GID '496' already exists  #如果出现这个提示就代表这个系统组ID已经被使用了
+					#安装vim
+					yum install vim
+					#添加-y参数，不用手动输入yes，自动安装
+					yum install vim -y
 					</code>
 					</pre>
 
-					<h3 id="Linux-users-and-groups-5">b.如何重命名组</h3>
-
-					<p>可以通过groupmod来更改当前已存在的组名，同时也能更改GID，请看下面的实例：</p>
+					<p>● yum更新软件：</p>
 					<pre class="command-line" 
 						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
-					     data-user="mm" 
+					     data-user="root" 
 					     data-host="hackmm.com" 
-					     data-output="1,3-4"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					     data-output="1,3,4,6,7,9,10"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
 					<code class="language-bash">
-					#将"hackmm1"改名成"hackmm111"
-					sudo groupmod -n hackmm111 hackmm1
+					#单独更新vim软件到最新版本，并且保留旧版本安装包
+					yum update vim
 
-					#将"hackmm2"改名成"hackmm222"并将GID更改成666
-					sudo groupmod -g 666 -n hackmm222 hackmm2
+					#单独更新vim软件到最新版本，并且删除旧版本安装包
+					yum upgrade vim
+
+					#更新系统中所有已安装的软件包到最新版本，并且保留旧版本安装包
+					yum update
+
+					#更新系统中所有已安装的软件包到最新版本，并且删除旧版本安装包
+					yum upgrade
 					</code>
 					</pre>
+					
+					<p>注意：yum update和yum upgrade的功能都是一样的，都是将需要更新的package更新到源中的最新版。唯一不同的是，yum upgrade会删除旧版本的package，而yum update则会保留旧版本的package(obsoletes=0)。所以，生产环境中建议使用yum update，防止因为替换，导致旧的软件包依赖出现问题。</p>
 
-					<h3 id="Linux-users-and-groups-6">c.如何删除组</h3>
-
-					<p>可以使用下面的命令来删除当前已存在的组：</p>
+					<p>● yum从系统中删除软件：</p>
 					<pre class="command-line" 
 						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
-					     data-user="mm" 
-					     data-host="hackmm.com" 
-					     data-output="1"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
-					<code class="language-bash">
-					#删除上面创建的"SystemHackmm1"
-					sudo groupdel SystemHackmm1
-					</code>
-					</pre>
-
-					<p>通过上面的操作，现在系统中有两个新创建的用户组，分别是"hackmm111"和"hackmm222"，继续下面的实验。</p>
-
-					<h2 id="Linux-users-and-groups-7">0×4.Linux用户管理</h2>
-					<h3 id="Linux-users-and-groups-8">a.如何添加用户</h3>
-					<p>使用useradd命令来创建用户：</p>
-					<pre class="command-line" 
-						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
-					     data-user="mm" 
-					     data-host="hackmm.com" 
-					     data-output="1,3-4,6-7,9-10"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
-					<code class="language-bash">
-					#不带任何参数，添加一个名称为"hackmm1"的用户，系统会自动创建一个用户组，组名和用户名相同，然后将将这个用户划分到这个用户组下
-					sudo useradd hackmm1
-
-					#设置用户密码
-					sudo passwd hackmm1
-
-					#创建一个新用户"hackmm222"，指定他的UID为2222，并且将他分配到"hackmm222"这个组中
-					sudo useradd -u 2222 -g hackmm222 hackmm222
-
-					#创建一个新用户"hackmm111"，指定他的UID为1111，将他分配到"hackmm111"这个组中,并指定他的家目录为"/home/user111"
-					sudo useradd -u 1111 -g hackmm111 -d /home/user111 hackmm111
-					</code>
-					</pre>
-
-					<h3 id="Linux-users-and-groups-9">b.如何重命名用户</h3>
-					<p>使用usermod命令重命名用户：</p>
-					<pre class="command-line" 
-						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
-					     data-user="mm" 
-					     data-host="hackmm.com" 
-					     data-output="1,3-4"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
-					<code class="language-bash">
-					#将"hackmm222"重命名为"mm123"
-					sudo usermod -l mm123 hackmm222
-
-					#将上面创建的"hackmm1",重命名为"hello",并且将家目录也重命名为hello
-					sudo usermod -m -d /home/hello -l hello hackmm1
-					</code>
-					</pre>
-					<p>这个命令还能添加参数-g更改户组、-u更改UID等，大家可以自己去尝试一下。</p>
-
-					<h3 id="Linux-users-and-groups-10">c.如何锁定和解锁用户</h3>
-
-					<pre class="command-line" 
-						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
-					     data-user="mm" 
-					     data-host="hackmm.com" 
-					     data-output="1,3-4"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
-					<code class="language-bash">
-					#锁定hello用户，可以使用"Ctrl+Alt+F2"切换到tty2下面，然后尝试用被锁定的这个账户登录，会发现提示"Login incorrect"，登录不上
-					sudo usermod -L hello
-
-					#使用下面的命令解锁之后，就能正常登录了
-					sudo usermod -U hello
-					</code>
-					</pre>
-
-					<h3 id="Linux-users-and-groups-11">d.如何删除用户</h3>
-					<p>可以使用"userdel"命令来彻底删除用户：</p>
-					<pre class="command-line" 
-						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
-					     data-user="mm" 
+					     data-user="root" 
 					     data-host="hackmm.com" 
 					     data-output="1"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
 					<code class="language-bash">
-					#参数-r，可以删除用户并且删除用户的家目录以及邮件文件，用户邮件保存在目录"/var/spool/mail/"中
-					sudo userdel -r hello
+					#从系统中删除vim软件
+					yum remove vim
 					</code>
 					</pre>
 
-					<p>Ps：在Ubuntu系统中，普通用户的UID和GID都是从1000开始的，1000以内都是系统UID和GID，而CentOS系统的普通用户UID和GID是从500开始的，请根据不同系统判断，判断的方法就是创建一个普通用户就知道了，如果是1000+的UID那么系统用户UID就是0-1000。</p>
-
-					<h3 id="Linux-users-and-groups-12">e.修改用户属组</h3>
-					<p>在CentOS使用useradd创建用户后，默认会创建一个与用户同名的用户组，这个组就是用户的默认属组，除此之外，用户也同时能够属于多个组，请看下面的实例：</p>
+					<p>● yum从系统中清除下载的软件包缓存：</p>
 					<pre class="command-line" 
 						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
-					     data-user="mm" 
+					     data-user="root" 
 					     data-host="hackmm.com" 
-					     data-output="1,4-5,7-10,12-15,18,20-23,25-26,28-29,30-32,34-35,37-40,42-45,48-49,51-52"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					     data-output="1"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
 					<code class="language-bash">
-					#创建两个用户u1，u2
-					sudo useradd u1
-					sudo useradd u2
+					#从系统中删除所有缓存
+					yum clean all
+					</code>
+					</pre>
+					
+					<h2 id="Linux-dnf-4">0×4.使用dnf安装卸载软件</h2>
 
-					#查看新建用户
-					tail -n 2 /etc/passwd
-					u1:x:1001:1001::/home/u1:/bin/bash
-					u2:x:1002:1002::/home/u2:/bin/bash
+					<p>dnf命令来自英文词组“Dandified YUM”的缩写，是新一代的软件包管理器，dnf开发的初衷是作为yum包管理器的替代版本，其功能是用于安装、更新、卸载Linux系统中的软件。 最初应用于Fedora 18系统中，目标非常明确的想要解决掉yum命令的诸多瓶颈问题，例如占用大量内存、臃肿的软件依赖关系、运行速度缓慢等等诟病。</p>
 
-					#新建用户默认属组，从下面输出可以看到，系统自动创建了两个与用户同名的组
-					tail -n 2 /etc/group
-					u1:x:1001:
-					u2:x:1002:
+					<p>dnf命令的参数和用法与yum完全一样，只需要将命令中的yum替换成dnf即可，请看下面的演示：</p>
 
-					#现在再来创建两个组
-					sudo groupadd g1
-					sudo groupadd g2
-
-					tail -n 2 /etc/group
-					g1:x:1003:
-					g2:x:1004:
-
-					#使用"usermod -g 组名 用户名"更改u1的默认属组为g1
-					sudo usermod -g g1 u1
-
-					#查看u1的组ID为1003也就是g1的组ID
-					tail -n 2 /etc/passwd
-					u1:x:1001:1003::/home/u1:/bin/bash
-					u2:x:1002:1002::/home/u2:/bin/bash
-
-					#将u2添加到g1与g2组，语法
-					#usermod -G 组名,组名 用户名
-					sudo usermod -G g1,g2 u2
-
-					#查看u2的组ID仍然为1002，说明它的默认组仍然是u2
-					tail -n 2 /etc/passwd
-					u1:x:1001:1003::/home/u1:/bin/bash
-					u2:x:1002:1002::/home/u2:/bin/bash
-
-					#如果一个用户，默认属于哪个组，那么他不会出现在组列表的冒号后面，例如u1用户默认组是g1，就不会显示在冒号后面，下面的输出中，u2显示在冒号后面，因为它的默认组是u2，不是g1和g2，但它属于g1和g2组中的一员
-					tail -n 2 /etc/group
-					g1:x:1003:u2
-					g2:x:1004:u2
-
-					#将用户u1的默认组改回u1组，然后将u1放到g1组中
-					sudo usermod -g u1 u1
-					sudo usermod -G g1 u1
-
-					#这次可以看到g1后面出现了u1这个用户
-					tail -n 2 /etc/group
-					g1:x:1003:u2,u1
-					g2:x:1004:u2
+					<p>● dnf查找在线仓库中是否存在某软件包：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1,3-8"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#使用search参数查找仓库中是否存在vim程序的安装包
+					dnf search vim
+					===== 名称 和 概况 匹配：vim =====
+					vim-X11.x86_64 : The VIM version of the vi editor for the X Window System - GVim
+					vim-common.x86_64 : The common files needed by any version of the VIM editor
+					vim-enhanced.x86_64 : A version of the VIM editor which includes recent : enhancements
+					vim-filesystem.noarch : VIM filesystem layout
+					vim-minimal.x86_64 : A minimal version of the VIM editor
 					</code>
 					</pre>
 
-					<p>再来看另一个实例：</p>
-					<pre data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'>
+					<p>● dnf查询某个软件包详细信息：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1,3"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
 					<code class="language-bash">
-					#首先创建一个组g1，一个用户u1
-					root@hackmm.com:~# groupadd g1
-					root@hackmm.com:~# useradd u1
-					root@hackmm.com:~# passwd u1 
-					输入新的 UNIX 密码： 
-					重新输入新的 UNIX 密码： 
-					passwd：已成功更新密码
-
-					#查看u1的ID，它默认属于u1组
-					root@hackmm.com:~# id u1
-					uid=1014(u1) gid=1016(u1) 组=1016(u1)
-
-					#将u1放到g1组里面
-					root@hackmm.com:~# usermod -G g1 u1
-					root@hackmm.com:~# id u1
-					uid=1014(u1) gid=1016(u1) 组=1016(u1),1015(g1)
-
-					#使用root权限创建一个测试文件
-					root@hackmm.com:~# touch rootfile
-
-					#将这个测试文件的属组改成g1
-					root@hackmm.com:~# chgrp g1 rootfile 
-					root@hackmm.com:~# ls -al rootfile 
-					-rw-r--r-- 1 root g1 0 12月  6 11:40 rootfile
-
-					#对rootfile写入数据
-					root@hackmm.com:~# echo www.hackmm.com &gt; rootfile 
-
-					#将rootfile复制到/home目录
-					root@hackmm.com:~# cp rootfile /home
-					#切换到u1用户，尝试读取文件内容
-					root@hackmm.com:~# su u1
-					u1@hackmm.com:/root$ cd /home
-					u1@hackmm.com:/home$ cat rootfile 
-					www.hackmm.com
-
-					#虽然文件所有者是root但是因为u1属于g1组，并且文件属组对文件有可读权限，所以上面能够使用u1来读取文件内容
-					u1@hackmm.com:/home$ ls -al rootfile 
-					-rw-r--r-- 1 root share 18 12月  6 11:41 rootfile
-
-					#但是不可写
-					u1@hackmm.com:/home$ echo www.hackmm.com &gt;&gt; rootfile 
-					bash: rootfile: 权限不够
+					#使用list或者info参数查找系统中是否已经安装了vim
+					dnf list vim
+					#如果vim已经安装，显示详细信息
+					dnf info vim
 					</code>
 					</pre>
-					<p>从上面这个实例可以看到，对文件而言，如果文件所有者不是u1，只要文件的属组是g1，u1又属于g1组，不管用户的默认组是不是g1，用户对这个文件的权限就等于g1组对这个文件的权限。</p>
+
+					<p>● dnf安装软件：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1,3"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#安装vim
+					dnf install vim
+					#添加-y参数，不用手动输入yes，自动安装
+					dnf install vim -y
+					</code>
+					</pre>
+
+					<p>● dnf更新软件：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1,3,4,6,7,9,10"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#单独更新vim软件到最新版本，并且保留旧版本安装包
+					dnf update vim
+
+					#单独更新vim软件到最新版本，并且删除旧版本安装包
+					dnf upgrade vim
+
+					#更新系统中所有已安装的软件包到最新版本，并且保留旧版本安装包
+					dnf update
+
+					#更新系统中所有已安装的软件包到最新版本，并且删除旧版本安装包
+					dnf upgrade
+					</code>
+					</pre>
+					
+					<p>注意：dnf update和dnf upgrade的功能都是一样的，都是将需要更新的package更新到源中的最新版。唯一不同的是，dnf upgrade会删除旧版本的package，而dnf update则会保留旧版本的package(obsoletes=0)。所以，生产环境中建议使用dnf update，防止因为替换，导致旧的软件包依赖出现问题。</p>
+
+					<p>● dnf从系统中删除软件：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#从系统中删除vim软件
+					dnf remove vim
+					</code>
+					</pre>
+
+					<p>● dnf从系统中清除下载的软件包缓存：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#从系统中删除所有缓存
+					dnf clean all
+					</code>
+					</pre>
+
+					<h2 id="Linux-dpkg-5">0×5.使用dpkg命令安装卸载软件</h2>
+
+					<p>dpkg是Debian系列linux的默认包管理器，在Debian系列linux中，所有封装好的安装包都是以.deb后缀结尾，例如搜狗拼音输入法：sogoupinyin_4.2.1.145_amd64.deb，下面是dpkg包管理器的命令实例。</p>
+
+					<p>● dpkg查询已安装好的软件的版本信息：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#通过dpkg的-l参数查询已经安装好的vim软件的版本信息
+					dpkg -l vim
+					</code>
+					</pre>
+
+					<p>● dpkg查询已安装好的软件在系统中的位置：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#通过dpkg的-L参数查询vim软件包释放到系统的哪些位置
+					dpkg -L vim
+					</code>
+					</pre>
+
+					<p>● dpkg查询已经安装的软件包详情：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#通过dpkg的-s参数查询vim软件包详情
+					dpkg -s vim
+					</code>
+					</pre>
+
+					<p>● dpkg列出deb安装包中的内容：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#通过dpkg的-c参数列出搜狗拼音输入法deb包的内容（包含的文件以及路径）
+					dpkg -c sogoupinyin_4.2.1.145_amd64.deb
+					</code>
+					</pre>
+
+					<p>● dpkg安装deb软件包：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#通过dpkg的-i参数安装搜狗拼音输入法软件包（安装不会成功，因为会遇到依赖软件没有安装的问题）
+					dpkg -i sogoupinyin_4.2.1.145_amd64.deb
+					</code>
+					</pre>
+					<p>在上面这个实例中，安装会失败，因为搜狗输入法安装包需要先安装fcitx等输入法框架，这也是dpkg安装方法的一个弊端，无法自己识别和安装有依存关系的软件包。</p>
+
+					<p>● dpkg移除已经安装的软件包：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1,3,4"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#通过dpkg的-r参数，可以移除指定的软件，但是会保留软件包的配置文件
+					dpkg -r vim
+
+					#通过dpkg的-P参数（大写P），可以移除指定的软件，并且同时删除软件的配置文件
+					dpkg -P vim
+					</code>
+					</pre>
+					<p>对于Debian系列Linux系统，推荐使用apt方式在线安装和卸载软件，请看下一小节的实例演示。</p>
+
+					<h2 id="Linux-apt-get-6">0×6.使用apt-get安装卸载软件</h2>
+
+					<p>APT（英语：Advanced Packaging Tools）是高级包装工具的意思，它是Debian及其衍生发行版（如：ubuntu）的自动化软件包管理器。可以自动下载，配置，安装二进制或者源代码格式的软件包，并且自动解决软件包之间的依赖问题。</p>
+					<p>● 使用apt更新系统中所有已安装的软件包到最新版：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1-3"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#不同于RHEL系列，apt update仅用来从服务器获取最新的软件列表以及对应软件的版本号
+					#apt upgrade才会根据最新的软件列表更新系统中已经安装的软件
+					#所以这两条命令通常都是组合使用
+					apt update &amp;&amp; apt upgrade
+					</code>
+					</pre>
+
+					<p>● 使用apt安装软件：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#使用apt的install参数安装vim
+					apt install vim
+					</code>
+					</pre>
+
+					<p>● 使用apt解决安装依赖问题：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#有时候使用dpkg安装软件，会出现一大堆没有安装的依赖包，这个时候就能使用apt的-f参数（--fix-broken）来自动安装依赖软件包
+					apt install -f
+					</code>
+					</pre>
+
+					<p>● 使用apt卸载已经安装的软件：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#使用apt的remove参数卸载已经安装的vim软件包
+					apt remove vim
+					</code>
+					</pre>
+
+					<p>● 使用apt查看安装包的依赖关系列表：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#使用apt的rdepends（Reverse Depends）参数，查看vim的软件依赖关系列表
+					apt rdepends vim
+					</code>
+					</pre>
+					
+					<h2 id="Linux-pacman-7">0×7.使用pacman安装卸载软件</h2>
+
+					<p>Pacman是Arch系列Linux的包管理器，同样可以在线安装软件，请看下面的实例。</p>
+
+					<p>● 使用pacman更新整个系统：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#ArchLinux是一款滚动更新的操作系统，所以只需要下面这一条命令，就能将系统更新到最新版（这条命令不会更新内核）
+					pacman -Syyu
+					</code>
+					</pre>
+
+					<p>● 使用pacman安装软件：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1,3,4"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#使用pacman的-S参数，安装vim
+					pacman -S vim
+
+					#使用pacman的-U参数，能够安装本地软件包，在Arch中，软件包的扩展名为pkg.tar.zst
+					pacman -U hackmm.1.8.0-1-any.pkg.tar.zst
+					</code>
+					</pre>
+
+					<p>● 使用pacman卸载软件：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#使用pacman的-R参数，卸载vim
+					pacman -R vim
+					</code>
+					</pre>
+
+					<p>● 使用pacman查询软件信息：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1,3,4,6,7"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#使用pacman的-Ss参数，搜索包含关键字openssh的包
+					pacman -Ss openssh 
+
+					#使用pacman的-Qi参数，搜索openssh包的详细信息
+					pacman -Qi openssh
+
+					#使用pacman的-Ql参数，查看openssh包安装后会释放到系统哪些目录
+					pacman -Ql openssh
+					</code>
+					</pre>
+
+					<p>● 使用pacman清除软件包缓存：</p>
+					<pre class="command-line" 
+						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
+					     data-user="root" 
+					     data-host="hackmm.com" 
+					     data-output="1-4,6-7"> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
+					<code class="language-bash">
+					#所有使用pacman安装过的软件包都会被缓存到/var/cache/pacman/pkg/目录下
+					#系统这样做的好处是当我们删除某个软件之后再安装，系统会先去缓存目录寻找这个软件的安装包
+					#如果有缓存，并且版本和服务器的最新版一样，那么就直接从缓存目录安装，这样也会导致这个目录越来越大
+					#可以通过下面的命令清空软件包缓存目录
+					pacman -Scc
+
+					#下面的命令只会将软件包下载到缓存目录/var/cache/pacman/pkg/，不会安装
+					pacman -Sw vim
+					</code>
+					</pre>
+
+					<h2 id="Linux-video-8">0×8.视频演示</h2>
+
+					
 
 					<!-- /正文 -->
 
@@ -490,7 +675,7 @@
 					<p>
 						*转载请注明来自:<a title="HackMM.COM" style="color: rgb(4,181,150);" href="https://www.HackMM.com" target="_blank">HackMM.COM</a>
 					</p>
-					<p>*原文连接:<a title="[Linux基础]-5-用户和组管理" style="color: rgb(4,181,150);" href="https://www.HackMM.com/mm/Linux-basic-5.html" target="_blank">https://www.HackMM.com/mm/Linux-basic-5.html</a></p>
+					<p>*原文连接:<a title="[Linux基础]-5-软件的安装与管理" style="color: rgb(4,181,150);" href="https://www.HackMM.com/mm/Linux-basic-5.html" target="_blank">https://www.HackMM.com/mm/Linux-basic-5.html</a></p>
 				</footer>
 			</article>
 			<!-- /文章区 -->	
