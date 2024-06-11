@@ -285,7 +285,7 @@
 					#在/etc/systemd/system/目录中创建一个hkmm.service服务配置文件（需要root权限，所以要sudo）
 					#根据我们上面对服务配置文件的解析，我们知道这个配置文件，需要等网络服务启动之后才会运行
 					#必须要加上network-online.target，否则很可能服务没有等待获取到地址就开始ping，dns会解析失败从而让服务启动失败
-					#并且服务运行后，会用bash去执行用户家目录的hkmm.sh脚本文件
+					#并且服务运行后，会用bash去执行用户家目录的hkmm.sh脚本文件，如果是调用其它的程序，建议用程序的绝对路径，不容易报错
 					#User=字段指定用什么权限的用户去执行ExecStart命令，本例是用hackmm这个用户去执行
 					#并且如果设置了开机启动，会在/etc/systemd/system/multi-user.target.wants目录生成软连接指向/etc/systemd/system/hkmm.service文件
 					mm@hackmm.com:~$ sudo vim /etc/systemd/system/hkmm.service
