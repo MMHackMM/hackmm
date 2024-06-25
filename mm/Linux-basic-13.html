@@ -94,7 +94,7 @@
 				</header>
 				<section class="text-body">
 					<h2>引言</h2>
-					<p>这篇文章介绍Linux系统中几个非常常用的硬盘分区管理命令。fdisk -- 硬盘分区等、mkfs -- 分区的格式化、mount -- 分区的挂载、parted -- 硬盘分区管理等。</p>
+					<p>这篇文章介绍Linux系统中几个非常常用的硬盘分区管理命令。fdisk、gdisk、parted-- 硬盘分区管理等、mkfs -- 分区的格式化、mount -- 分区的挂载。</p>
 					<!-- 目录 -->
 					<h2>文章目录</h2>
 					 <ul class="contents">	
@@ -104,11 +104,12 @@
 						 <li class="subli"><a href="#Linux-fdisk-4">b.使用fdisk创建分区</a></li>
 						 <li class="subli"><a href="#Linux-fdisk-5">c.使用fdisk改变分区文件系统类型</a></li>
 						 <li class="subli"><a href="#Linux-fdisk-7">d.使用fdisk删除分区</a></li>
-						 <li><a href="#Linux-mkfs-8">0×3.使用mkfs格式化分区</a></li>
-						 <li><a href="#Linux-mount-9">0×4.使用mount挂载和卸载分区</a></li>
-						 <li class="subli"><a href="#Linux-fstab-10">a.编辑/etc/fstab文件实现自动挂载</a></li>
-						 <li><a href="#Linux-mkswap-11">0×5.Linux如何创建SWAP分区</a></li>
-						 <li><a href="#Linux-parted-12">0×6.linux如何使用parted进行硬盘分区管理</a></li>
+						 <li><a href="#Linux-gdisk-8">0×3.Linux使用gdisk对硬盘进行分区管理</a></li>
+						 <li><a href="#Linux-mkfs-9">0×4.使用mkfs格式化分区</a></li>
+						 <li><a href="#Linux-mount-10">0×5.使用mount挂载和卸载分区</a></li>
+						 <li class="subli"><a href="#Linux-fstab-11">a.编辑/etc/fstab文件实现自动挂载</a></li>
+						 <li><a href="#Linux-mkswap-12">0×6.Linux如何创建SWAP分区</a></li>
+						 <li><a href="#Linux-parted-13">0×7.linux如何使用parted进行硬盘分区管理</a></li>
 					 </ul>
 					<!-- /目录 -->
 
@@ -159,7 +160,7 @@
 						/dev/nvme1n1<br>
 						以此类推；
 					</p>
-					<p>例外：当M.2硬盘通过SATA协议连接时，它通常会被识别为一个SATA设备，命名规则同SATA硬盘前缀为sd。</p>
+					<p>例外：当M.2硬盘通过SATA协议连接时，它通常会被识别为一个SATA设备，命名规则同SATA硬盘前缀为sd，什么时候会通过SATA协议连接？当使用显卡插槽的硬盘扩充卡的时候，就会使用SATA线连接。</p>
 
 					<p>当了解了上面这些基础知识之后，我们同时也知道硬盘在linux中都作为文件存在/dev目录中，那么我们就能够通过下面的方法来查看我们都安装了哪些硬盘：</p>
 					<pre data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'>
@@ -180,6 +181,9 @@
 					#第二块nvme划分了一个分区nvme1n1p1
 					mm@hackmm.com:~$ ls /dev/nvme*
 					/dev/nvme0  /dev/nvme0n1  /dev/nvme0n1p1  /dev/nvme0n1p2  /dev/nvme0n1p3  /dev/nvme1  /dev/nvme1n1  /dev/nvme1n1p1
+
+					#除了ls命令直接查看外，还可以使用lsblk命令来查看
+					mm@hackmm.com:~$ lsblk
 					</code>
 					</pre>
 					<p>这样我们从设备文件的角度去观察，就已经掌握了电脑硬件中存在的存储设备数量，以及它们的接口类型，接下来介绍的另外一个命令，能够对这些类型的存储设备进行分区和管理。</p>
@@ -195,7 +199,7 @@
 					<p class="indent-p">
 						● 40G -- 接口SCSI
 					</p>
-					<p>！！！注意！！！NVMe-M2类型的硬盘只能在虚拟机关机状态下添加，硬盘添加好后，如果开机黑屏，对于Linux虚拟机，建议将虚拟机设置中的显卡3D取消勾选，否则容易开机黑屏bug，如果提示找不到系统，在虚拟机BIOS里面将系统所在盘调到第一位。</p>
+					<p>！！！注意！！！NVMe-M2类型的硬盘只能在虚拟机关机状态下添加，硬盘添加好后，如果开机黑屏，对于Linux虚拟机，建议将虚拟机设置中的显卡3D取消勾选，否则容易开机黑屏bug；还有一种情况是提示找不到系统，需要在虚拟机BIOS里面将系统所在盘调到第一位。</p>
 					<h3 id="Linux-fdisk-3">a.使用fdisk查看硬盘以及分区信息</h3>
 					<p>开机进入系统后，使用fdisk来对上面添加的三块硬盘进行分区操作。</p>
 					<p>fdisk是Linux下面的一个硬盘管理命令。可以查看当前环境有几块硬盘，每块硬盘的大小，每块硬盘上都划分了那些区域，还可以对硬盘进行分区、删除、改变分区文件系统类型等操作：</p>
@@ -678,7 +682,38 @@
 					</pre>
 					<p>分区完成后就可以对分区进行格式化操作了，只有被格式化之后，这个分区才能被挂载使用，部分发行版格式化前必须重启系统，新建的分区才能被识别（不同的系统可能不一样，一部分Linux发行版分区完成后直接就能格式化无需重启）。</p>
 
-					<h2 id="Linux-mkfs-8">0×3.使用mkfs格式化分区</h2>
+					<h2 id="Linux-gdisk-8">0×3.Linux使用gdisk对硬盘进行分区管理</h2>
+
+					<p>gdisk 是一种用于管理和操作 GPT (GUID Partition Table) 分区表的命令行工具。它与 fdisk 类似，但 fdisk 目前最大仅支持最大2TB的硬盘进行分区管理，而 gdisk 可以支持超过2TB的硬盘，并且gdisk的操作命令与fdisk相同。</p>
+
+					<p>唯一的缺点是无法通过gdisk -l这个命令来显示主机安装了哪些硬盘，所以还需要配合fdisk或者lsblk命令一起使用。</p>
+					<pre data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'>
+					<code class="language-bash">
+					#首先通过fdisk查看我们需要操作的硬盘
+					mm@hackmm.com:~$ sudo fdisk -l
+					#假设我们需要操作20G这块M.2硬盘
+					mm@hackmm.com:~$ sudo gdisk /dev/nvme0n2
+					Command (? for help): o    #输入o可以新建GPT分区表，注意gdisk不支持MBR
+					Proceed? (Y/N): Y    #输入Y，这个操作会将旧的分区全部删除（！）
+
+					#剩下的操作和fdisk命令大同小异
+					Command (? for help): n  #创建新的分区
+					Partition number (1-128, default 1):  #直接回车，默认分区号从1开始
+					First sector (34-41943006, default = 2048) or {+-}size{KMGTP}:  #直接回车，从第一个扇区开始分区
+					Last sector (2048-41943006, default = 41943006) or {+-}size{KMGTP}: +5G  #分配5G大小给第一个分区
+					Current type is 8300 (Linux filesystem)
+					Hex code or GUID (L to show codes, Enter = 8300):  #直接回车，默认的文件系统为Linux fs
+					Changed type of partition to 'Linux filesystem'
+
+					Command (? for help): p  #查看分区表
+					Number  Start (sector)    End (sector)  Size       Code  Name
+					   1            2048        10487807   5.0 GiB     8300  Linux filesystem
+
+					 #用同样的方法可以创建分区2..3等，这里就不再赘述了，值得注意的是，如果想要创建Windows可以识别的分区类型，Hex code需要输入0700，即为0700 Microsoft basic data文件系统
+					</code>
+					</pre>
+
+					<h2 id="Linux-mkfs-9">0×4.使用mkfs格式化分区</h2>
 
 					<p>★ 将分区格式化成windows适用的NTFS格式</p>
 					<p>注意：ntfs-3g包可能不在默认的yum\dnf仓库中，这就意味着mkfs命令没有NTFS这种windows系统支持的分区格式，但可以尝试通过下面的方法，使用EPEL（Extra Packages for Enterprise Linux）仓库来安装 ntfs-3g。</p>
@@ -712,7 +747,7 @@
 					</code>
 					</pre>
 
-					<h2 id="Linux-mount-9">0×4.使用mount挂载分区</h2>
+					<h2 id="Linux-mount-10">0×5.使用mount挂载分区</h2>
 					<p>★ 使用分区名称来挂载</p>
 					<p>使用下面的命令，将/dev/sda1挂载到/home/mm/sda1：</p>
 					<pre data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'>
@@ -764,7 +799,7 @@
 					</code>
 					</pre>
 
-					<h3 id="Linux-fstab-10">a.编辑/etc/fstab文件实现自动挂载</h3>
+					<h3 id="Linux-fstab-11">a.编辑/etc/fstab文件实现自动挂载</h3>
 
 					<pre data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'>
 					<code class="language-bash">
@@ -792,7 +827,7 @@
 					</pre>
 					<p>使用/etc/fstab文件，每次重启，系统就会自动将fstab文件中指定的分区全部挂载上。</p>
 
-					<h2 id="Linux-mkswap-11">0×5.创建SWAP分区</h2>
+					<h2 id="Linux-mkswap-12">0×6.创建SWAP分区</h2>
 
 					<p>现在假设我们系统没有分配SWAP交换分区，而后我们想添加一个SWAP分区（或者扩充现有的SWAP分区大小），可以先使用fdisk从空余磁盘中取出一部分空间，然后激活成SWAP分区，请看下面的实例：</p>
 					<pre data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'>
@@ -887,7 +922,7 @@
 					</code>
 					</pre>
 
-					<h2 id="Linux-parted-12">0×6.linux如何使用parted进行硬盘分区管理</h2>
+					<h2 id="Linux-parted-13">0×7.linux如何使用parted进行硬盘分区管理</h2>
 					<p>parted 是一个用于磁盘分区的命令行工具，它允许用户在Linux系统中创建、删除、调整和管理磁盘分区。  parted 可以用于创建各种类型的分区表，并支持多种文件系统类型。 </p>
 					<p>以下是  parted 的一些主要特点和功能： </p>
  					<p class="indent-p">支持不同类型的分区表 ： parted 支持创建不同类型的分区表，包括传统的 MBR（Master Boot Record）分区表和现代的 GPT（GUID Partition Table）分区表；<br>
@@ -960,7 +995,7 @@
 					分区表：unknown
 					磁盘标志：
 
-					(parted) mklabel gpt  #创建gpt分区表
+					(parted) mklabel gpt  #创建gpt分区表，可以简写成mkl gpt，如果想要创建MBR类型，可以mkl msdos
 					(parted) p  #print可以简写成p
 					型号：VMware, VMware Virtual S (scsi)
 					磁盘 /dev/sdb：42.9GB
@@ -974,7 +1009,7 @@
 
 					#再次进入prated命令模式
 					mm@hackmm.com:~$ sudo parted /dev/sda                                
-					(parted) mkl msdos  #尝试将分区表类型更改成MBR，mklabel可以简写成mkl
+					(parted) mkl msdos  #尝试将分区表类型更改成MBR
 					警告: 现有 /dev/sdb 上的磁盘卷标将被销毁，而所有在这个磁盘上的数据将会丢失。您要继续吗？
 					是/Yes/否/No? yes  #给出警告，输入yes就会让更改生效，一定要看清楚再yes
 					(parted) p                                                                
@@ -989,6 +1024,72 @@
 					(parted) mkl gpt  #再重新将分区表更改成GPT
 					警告: 现有 /dev/sdb 上的磁盘卷标将被销毁，而所有在这个磁盘上的数据将会丢失。您要继续吗？
 					是/Yes/否/No? yes
+
+					#现在来看看怎么用parted进行分区
+					[hackmm@localhost ~]$ sudo parted /dev/sdb
+					#分区命令mkpart可以简写成mkp
+					#mkp [分区标志] [分区文件系统类型] [起始点] [结束点]
+					#按照这个语法，我们给分区起名叫hkmm，类型为ext4，从硬盘的1M处开始划分空间，到5G处作为空间结束点
+					(parted) mkp hkmm ext4 1M 5G
+
+					(parted) p  #查看分区
+					型号：VMware, VMware Virtual S (scsi)
+					磁盘 /dev/sdb：42.9GB
+					扇区大小 (逻辑/物理)：512B/512B
+					分区表：gpt
+					磁盘标志：
+
+					编号  起始点  结束点  大小    文件系统  名称  标志
+					 1    1049kB  5000MB  4999MB  ext4      hkmm
+
+					 #再分配一个NTFS分区，从上一个分区的结束点（5G处）开始，到10G结束
+					(parted) mkp hkmm ntfs 5G 10G
+
+					(parted) p                                                                
+					型号：VMware, VMware Virtual S (scsi)
+					磁盘 /dev/sdb：42.9GB
+					扇区大小 (逻辑/物理)：512B/512B
+					分区表：gpt
+					磁盘标志：
+
+					编号  起始点  结束点  大小    文件系统  名称  标志
+					 1    1049kB  5000MB  4999MB  ext4      hkmm
+					 2    5000MB  10.0GB  5001MB  ntfs      hkmm  msftdata
+
+					 #除了上面的语法，还可以直接输出mkp，然后依次填入分区信息，如下
+					(parted) mkp
+					分区名称？  []? hkmm                                                      
+					文件系统类型？  [ext2]? ext4                                              
+					起始点？ 10G  #注意，起始点一定要是上一个分区的结束点，用p命令可以查看到
+					结束点？ 20G #相当于分配一个从10G-20G，也就是大小是10G的分区
+
+					(parted) p                                                                
+					型号：VMware, VMware Virtual S (scsi)
+					磁盘 /dev/sdb：42.9GB
+					扇区大小 (逻辑/物理)：512B/512B
+					分区表：gpt
+					磁盘标志：
+
+					编号  起始点  结束点  大小    文件系统  名称  标志
+					 1    1049kB  5000MB  4999MB  ext4      hkmm
+					 2    5000MB  10.0GB  5001MB  ntfs      hkmm  msftdata
+					 3    10.0GB  20.0GB  9999MB  ext4      hkmm
+
+					 #如果我们想从上一个分区的结束点，直接分配一个分区占用整个硬盘剩余空间，可以使用100%参数
+					(parted) mkp hkmm ext4 20G 100%
+					
+					(parted) p                                                                
+					型号：VMware, VMware Virtual S (scsi)
+					磁盘 /dev/sdb：42.9GB
+					扇区大小 (逻辑/物理)：512B/512B
+					分区表：gpt
+					磁盘标志：
+
+					编号  起始点  结束点  大小    文件系统  名称  标志
+					 1    1049kB  5000MB  4999MB  ext4      hkmm
+					 2    5000MB  10.0GB  5001MB  ntfs      hkmm  msftdata
+					 3    10.0GB  20.0GB  9999MB  ext4      hkmm
+					 4    20.0GB  42.9GB  22.9GB  ext4      hkmm
 					</code>
 					</pre>
 
