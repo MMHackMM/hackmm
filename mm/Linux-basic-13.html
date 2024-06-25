@@ -1024,7 +1024,12 @@
 					(parted) mkl gpt  #再重新将分区表更改成GPT
 					警告: 现有 /dev/sdb 上的磁盘卷标将被销毁，而所有在这个磁盘上的数据将会丢失。您要继续吗？
 					是/Yes/否/No? yes
+					</code>
+					</pre>
 
+					<p>★ parted分区</p>
+					<pre data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'>
+					<code class="language-bash">
 					#现在来看看怎么用parted进行分区
 					[hackmm@localhost ~]$ sudo parted /dev/sdb
 					#分区命令mkpart可以简写成mkp
@@ -1077,7 +1082,7 @@
 
 					 #如果我们想从上一个分区的结束点，直接分配一个分区占用整个硬盘剩余空间，可以使用100%参数
 					(parted) mkp hkmm ext4 20G 100%
-					
+
 					(parted) p                                                                
 					型号：VMware, VMware Virtual S (scsi)
 					磁盘 /dev/sdb：42.9GB
@@ -1090,6 +1095,97 @@
 					 2    5000MB  10.0GB  5001MB  ntfs      hkmm  msftdata
 					 3    10.0GB  20.0GB  9999MB  ext4      hkmm
 					 4    20.0GB  42.9GB  22.9GB  ext4      hkmm
+					</code>
+					</pre>
+
+					<p>★ parted修改分区信息（标志，大小）</p>
+					<pre data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'>
+					<code class="language-bash">
+					#将编号为4的分区的标志修改成hackmm
+					(parted) name 4 hackmm
+					(parted) p
+					型号：VMware, VMware Virtual S (scsi)
+					磁盘 /dev/sdb：42.9GB
+					扇区大小 (逻辑/物理)：512B/512B
+					分区表：gpt
+					磁盘标志：
+
+					编号  起始点  结束点  大小    文件系统  名称    标志
+					 1    1049kB  5000MB  4999MB  ext4      hkmm
+					 2    5000MB  10.0GB  5001MB  ntfs      hkmm    msftdata
+					 3    10.0GB  20.0GB  9999MB  ext4      hkmm
+					 4    20.0GB  42.9GB  22.9GB  ext4      hackmm <--修改了这里
+
+					 #修改分区大小，以分区4为例
+					 #语法 resizepart [分区号] [结束点]
+					 #将分区4缩小，结束点设置在30G
+					 (parted) resizepart 4 30G
+					警告: 缩小分区可导致数据丢失，你确定要继续吗？ [!!!注意，缩小分区会让数据丢失，慎用!!!]
+					是/Yes/否/No? yes 
+
+					(parted) p                                                                
+					型号：VMware, VMware Virtual S (scsi)
+					磁盘 /dev/sdb：42.9GB
+					扇区大小 (逻辑/物理)：512B/512B
+					分区表：gpt
+					磁盘标志：
+
+					编号  起始点  结束点  大小    文件系统  名称    标志
+					 1    1049kB  5000MB  4999MB            hkmm
+					 2    5000MB  10.0GB  5001MB            hkmm    msftdata
+					 3    10.0GB  20.0GB  9999MB            hkmm
+					 4    20.0GB  30.0GB  10.0GB  ext4      hackmm
+
+					 #扩大分区不会导致数据丢失，再将分区4扩大到结束点35G
+					(parted) resizepart 4 35G  
+
+					(parted) p                                                                
+					型号：VMware, VMware Virtual S (scsi)
+					磁盘 /dev/sdb：42.9GB
+					扇区大小 (逻辑/物理)：512B/512B
+					分区表：gpt
+					磁盘标志：
+
+					编号  起始点  结束点  大小    文件系统  名称    标志
+					 1    1049kB  5000MB  4999MB            hkmm
+					 2    5000MB  10.0GB  5001MB            hkmm    msftdata
+					 3    10.0GB  20.0GB  9999MB            hkmm
+					 4    20.0GB  35.0GB  15.0GB  ext4      hackmm
+
+					 #将最后一个分区4的大小扩充到占完整个硬盘空间
+					(parted) resizepart 4 100%
+					(parted) p                                                                
+					型号：VMware, VMware Virtual S (scsi)
+					磁盘 /dev/sdb：42.9GB
+					扇区大小 (逻辑/物理)：512B/512B
+					分区表：gpt
+					磁盘标志：
+
+					编号  起始点  结束点  大小    文件系统  名称    标志
+					 1    1049kB  5000MB  4999MB            hkmm
+					 2    5000MB  10.0GB  5001MB            hkmm    msftdata
+					 3    10.0GB  20.0GB  9999MB            hkmm
+					 4    20.0GB  42.9GB  23.0GB  ext4      hackmm
+					</code>
+					</pre>
+
+					<p>★ parted 删除分区</p>
+					<pre data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'>
+					<code class="language-bash">
+					#使用rm命令加上分区号，删除分区1和分区3
+					(parted) rm 1
+					(parted) rm 3 
+					                                                            
+					(parted) p                                                                
+					型号：VMware, VMware Virtual S (scsi)
+					磁盘 /dev/sdb：42.9GB
+					扇区大小 (逻辑/物理)：512B/512B
+					分区表：gpt
+					磁盘标志：
+
+					编号  起始点  结束点  大小    文件系统  名称    标志
+					 2    5000MB  10.0GB  5001MB            hkmm    msftdata
+					 4    20.0GB  42.9GB  23.0GB  ext4      hackmm
 					</code>
 					</pre>
 
