@@ -90,39 +90,93 @@
 			<!-- 文章区 -->
 			<article class="text-container">
 				<header class="text-header">
-					<h1>[Linux基础]-4-使用sed替换文件内容</h1>	
+					<h1>[Linux基础]-4-Linux文本处理三剑客</h1>	
 				</header>
 				<section class="text-body">
 					<h2>引言</h2>
-					<p>这篇文章介绍Linux中一个十分好用的文本内容替换命令——sed（Stream Editor）。</p>
+					<p>这篇文章介绍Linux中一个十分好用的三个文本内容处理命令——grep、sed（Stream Editor）、awk。</p>
 					<!-- 目录 -->
 					<ul class="contents">
-						 <li><a href="#Linux-sed-1">0×1.linux中的sed是什么命令</a></li>
-						 <li><a href="#Linux-sed-2">0×2.sed常用参数</a></li>
-						 <li><a href="#Linux-sed-3">0×3.sed实例</a></li>
-						 <li><a href="#Linux-sed-4">0×4.视频演示</a></li>
+						 <li><a href="#Linux-grep-1">0×1.grep命令实例</a></li>
+						 <li><a href="#Linux-sed-2">0×2.sed命令实例</a></li>
+						 <li><a href="#Linux-awk-3">0×3.awk命令实例</a></li>
+						 <li><a href="#Linux-video-4">0×4.视频演示</a></li>
 					 </ul>
 					<!-- /目录 -->
 
 					<!-- 正文 -->
+					<h2 id="Linux-grep-1">0×1.grep命令实例</h2>
 
-					<h2 id="Linux-sed-1">0×1.linux中的sed是什么命令</h2>
+					<p>★ 简介：grep是一个文本筛选命令，可以从命令输出结果或文本中筛选出我们想要的结果。</p>
+
+					<p>★ 命令演示</p>
+					<p>假设在我当前命令行目录下，有如下内容的一个文件，名称为hkmm.txt</p>
+					<pre>
+    hackmm hackMM
+    Hackmm HACkmm
+    HACKMM HACKMM Hackmm
+    hkmm hkmm hkmm HKmm
+    Hkmm Hkmm Hkmm hkMM
+    HKMM HKMM HKMM hKmM
+					</pre>
+					<p>现在用这个文件来演示grep的操作命令：</p>
+					<pre data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'>
+					<code class="language-bash">
+					#1.从文件中筛选包含指定字符的行显示出来
+					mm@hackmm.com:~$ grep "hkmm" hkmm.txt
+					hkmm hkmm hkmm HKmm  <--筛选结果
+
+					#2.使用-i参数，忽略大小写筛选，默认是严格按照大小写匹配
+					mm@hackmm.com:~$ grep -i "hkmm" hkmm.txt 
+					hkmm hkmm hkmm HKmm
+					Hkmm Hkmm Hkmm hkMM
+					HKMM HKMM HKMM hKmM
+
+					#3.使用-n参数，显示筛选到的行在文件中的行号
+					mm@hackmm.com:~$ grep -n "hkmm" hkmm.txt 
+					4:hkmm hkmm hkmm HKmm  <--筛选结果第一个字符，显示这是第4行
+
+					#4.使用-r参数递归搜索，在目录中查找文件，筛选出文件中指定的内容，显示出文件路径
+					#可以组合-n参数，显示筛选的内容在文件中的行号
+					mm@hackmm.com:~$ grep -r "hkmm" /home/hackmm
+					/home/hackmm/sda1/hkmm.txt:hkmm hkmm hkmm HKmm
+					/home/hackmm/hkmm.txt:hkmm hkmm hkmm HKmm
+
+					#5.查找以Hk开头的行
+					mm@hackmm.com:~$ grep "^Hk" hkmm.txt 
+					Hkmm Hkmm Hkmm hkMM
+
+					#6.查找以mm结尾的行
+					mm@hackmm.com:~$ grep "mm$" hkmm.txt 
+					Hackmm HACkmm
+					HACKMM HACKMM Hackmm
+					hkmm hkmm hkmm HKmm
+
+					#7.使用-c参数，统计匹配到的行数
+					mm@hackmm.com:~$ grep -c "mm$" hkmm.txt 
+					3
+
+					#8.使用管道命令，筛选命令输出结果
+					mm@hackmm.com:~$ ls -al | grep hkmm.txt
+					-rw-r--r--.  1 hackmm hackmm  109  6月 27 15:12 hkmm.txt
+					</code>
+				    </pre>
+
+					<h2 id="Linux-sed-2">0×2.sed命令实例</h2>
 
 					<p>sed是“Stream Editor”的简称，翻译成中文叫做“流编辑器”。sed一次只处理一行内容，处理时，sed会把当前处理的行存储在临时缓冲区中，这个缓冲区被称为"Pattern Space"，中文翻译成“模式空间”，大家可以简单的理解成sed把正在处理的一行数据暂时储存在内存中，处理完成后，再将结果打印到屏幕上显示，接着处理下一行，这样不断重复，直到文件末尾。如果不携带写入参数，文件的内容不会改变，只是处理和显示。</p>
 
-					<h2 id="Linux-sed-2">0×2.sed常用参数</h2>
-
-					<p>sed命令格式：</p>
+					<p>★ sed命令格式：</p>
 					<p class="indent-p">sed [option] 'command' input_file</p>
 
-					<p>常用选项option：</p>
+					<p>★ 常用选项option：</p>
 					<p class="indent-p">● -n 使用安静silent模式。在一般sed的用法中，所有来自stdin的内容一般都会被列出到屏幕上。但如果加上-n参数后，则只有经过sed特殊处理的那一行(或者动作)才会被列出来</p>
 					<p class="indent-p">● -e 直接在指令列模式上进行 sed 的动作编辑</p>
 					<p class="indent-p">● -f 直接将 sed 的动作写在一个文件内，-f filename则可以执行filename内的sed命令</p>
 					<p class="indent-p">● -r 让sed命令支持扩展的正则表达式(默认是基础正则表达式)</p>
 					<p class="indent-p">● -i 直接修改读取的文件内容，而不是由屏幕输出，如果加上-i.bk则将源文件先备份成.bk结尾的文件，再将修改写入原文件</p>
 
-					<p>常用命令command：</p>
+					<p>★ 常用命令command：</p>
 					<p class="indent-p">● Na\：在N行后追加行，N可以是大于0的整数，例如1a\的后面跟上字符串hackmm，则会在第1行后面增加一行并写入hackmm，追加多行可以用\n来换行，例如'1a\hackmm\nhkmm'，则会在第一行后面追加hackmm并且换行后再写入hkmm</p>
 					<p class="indent-p">● Nc\：替换N行，N可以是大于0的整数，例如'2c\hackmm'，则会将第2行替换成hackmm，同样支持\n换行例如'2c\hackmm\nhkmm'，那么就会将第3行顶到第4行去</p>
 					<p class="indent-p">● Ni\：在N行插入行，N可以是大于0的整数，不会覆盖被插入的行，被插入的行自动往下一行，例如'1i\hackmm'，则在第一行插入hackmm，同样支持\n换行</p>
@@ -131,14 +185,14 @@
 					<p class="indent-p">● y：替换每一行中指定的字符，例如'y|m|c|'，会替换每一行中出现的字符m，替换成c，其中|是分隔符，可以用任何单符号替代</p>
 					<p class="indent-p">● s：替换每一行中的字符串，但仅替换第一个找到的字符串，例如's|hackmm|hkmm|'，将每行第一个找到的hackmm替换成hkmm，其中|是分隔符，可以用任何单符号替代，如果想要替换整行出现的每一个hackmm需要加上“标志选项”，例如's|hackmm|hkmm|g'</p>
 
-					<p>s命令能够携带的标志选项Flags：</p>
+					<p>★ s命令能够携带的标志选项Flags：</p>
 					<p class="indent-p">● g：替换行中找到的所有，而不仅仅只是第一个</p>
 					<p class="indent-p">● digit：替换行中第digit个找到的匹配项，例如's|hackmm|hkmm|2'，那么将每行第二个hackmm替换成hkmm</p>
 					<p class="indent-p">● p：若发生了替换操作，那么将替换的行多输出一行打印出来，配合-n参数使用能够显示替换的行，例如：sed -n 's|hackmm|hkmm|p'则会将每个匹配到的行替换之后打印出来</p>
 					<p class="indent-p">● w file-name：若发生了替换操作，将输出写入指定的文件中，例如's|hackmm|hkmm|gw hkmm.txt'将命令输出写入hkmm.txt文件中，如果hkmm.txt文件不存在，则会创建</p>
 					<p class="indent-p">● i：表示进行匹配时，不区分大小写</p>
 
-					<p>命令支持的常用正则表达式：</p>
+					<p>★ 命令支持的常用正则表达式：</p>
 					<p class="indent-p">● * 	将*前面的正则表达式匹配的结果重复任意次(含0次)。</p>
 					<p class="indent-p">● \+ 与星号(*)相同，只是至少重复1次，GNU的扩展功能。</p>
 					<p class="indent-p">● \? 与星号(*)相同，只是最多重复1次，GNU的扩展功能。</p>
@@ -152,18 +206,18 @@
 					<p class="indent-p">● \{i,j\} 与星号(*)相同，只是重复i至j次。</p>
 					<p class="indent-p">● \{i, \} 与星号(*)相同，只是至少重复i次。</p>
 
-					<p>命令常用正则表达式组合：</p>
+					<p>★ 命令常用正则表达式组合：</p>
 					<p class="indent-p">● 's|^#\?Port.*|Port 2333|g' 匹配开头为#Port或Port的行（#\?表示匹配#符号0次或1次），并且Port后面的用贪婪匹配（.*），匹配到后，修改成Port 2333</p>
 					<p class="indent-p">● 's|^a.*z|abc|g' 匹配a开头z结尾的所有行，替换成abc</p>
 					<p class="indent-p">● 's|.*_key$|123|g' 匹配“_key”结尾的所有行，替换成123。.*写在_key之前，表示不管_key前面有多少字符，都会被匹配到</p>
 					<p class="indent-p">● 's|.*/ssh_host.*|123|g' 匹配包含/ssh_host的所有行，替换成123</p>
 
-					<p>常用正则表达式语法解释：</p>
+					<p>★ 常用正则表达式语法解释：</p>
 					<p class="indent-p">● .* --- 表示匹配除换行符 \n 之外的任何单字符，*表示零次或多次。所以.*在一起就表示任意字符出现零次或多次。没有?表示贪婪模式。比如a.*b，它将会匹配最长的以a开始，以b结束的字符串。如果用它来搜索aabab的话，它会匹配整个字符串aabab。这被称为贪婪匹配。</p>
 					<p class="indent-p">● .*? --- ?跟在*或者+后边用时，表示懒惰模式。也称非贪婪模式。就是匹配尽可能少的字符。就意味着匹配任意数量的重复，但是在能使整个匹配成功的前提下使用最少的重复。a.*?b匹配最短的，以a开始，以b结束的字符串。如果把它应用于aabab的话，它会匹配aab（第一到第三个字符）和ab（第四到第五个字符）。</p>
 					<p class="indent-p">● .+? --- ?跟在*或者+后边用时，表示懒惰模式。也称非贪婪模式。就意味着匹配任意数量的重复，但是在能使整个匹配成功的前提下使用最少的重复。a.+?b匹配最短的，以a开始，以b结束的字符串，但a和b中间至少要有一个字符。如果把它应用于ababccaab的话，它会匹配abab（第一到第四个字符）和aab（第七到第九个字符）。注意此时匹配结果不是ab,ab和aab。因为a和b中间至少要有一个字符。</p>
 
-					<h2 id="Linux-sed-3">0×3.sed实例</h2>
+					<p>★ sed实例演示</p>
 
 					<p>假设我们用来测试的文件名称叫做hkmm.txt，并且内容如下：</p>
 					<pre>
@@ -551,11 +605,82 @@
 					</code>
 					</pre>
 
-					
-					
-					
-					<h2 id="Linux-sed-4">0×4.视频演示</h2>
+					<h2 id="Linux-awk-3">0×3.awk命令实例</h2>
 
+					<p>awk 是一个强大的文本处理工具，用于对结构化文本进行模式匹配和处理，不同于grep和sed是以行作为处理对象，awk可以以列作为处理对象来处理文本。以下是一些 awk 使用的基本和高级示例</p>
+					<p>★ awk实例演示</p>
+				    <pre data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'>
+					<code class="language-bash">
+					#1.显示命令输出结果的第1、3、9列
+					#awk后面的匹配模式必须包含在一对单引号中
+					#对print这种指令必须放在一对大括号中
+					#用逗号隔开列占位符，可以让输出结果的每一列之间加一个空格
+					mm@hackmm.com:~$ ls -al | awk '{print $1,$3,$9}'
+					总用量  
+					drwx------. hackmm .
+					drwxr-xr-x. root ..
+					drwxr-xr-x. hackmm 公共
+					drwxr-xr-x. hackmm 模板
+					drwxr-xr-x. hackmm 视频
+					drwxr-xr-x. hackmm 图片
+					drwxr-xr-x. hackmm 文档
+					drwxr-xr-x. hackmm 下载
+					drwxr-xr-x. hackmm 音乐
+					drwxr-xr-x. hackmm 桌面
+					-rw-------. hackmm .bash_history
+					-rw-r--r--. hackmm .bash_logout
+					-rw-r--r--. hackmm .bash_profile
+					-rw-r--r--. hackmm .bashrc
+					drwx------. hackmm .cache
+					drwxr-xr-x. hackmm .config
+					-rw-r--r--. hackmm hkmm.txt
+					drwx------. hackmm .local
+					drwxr-xr-x. hackmm .mozilla
+					drwxr-xr-x. hackmm sda1
+					-rw-------. hackmm .viminfo
+
+					#2.打印第9列中包含hkmm.txt的行
+					mm@hackmm.com:~$ ls -al | awk '$9=="hkmm.txt" {print}'
+					-rw-r--r--.  1 hackmm hackmm  109  6月 28 15:57 hkmm.txt
+
+					#3.筛选出包含hkmm的行，这个功能同grep一样
+					mm@hackmm.com:~$ ls -al | awk '/hkmm/'
+					-rw-r--r--.  1 hackmm hackmm  109  6月 28 15:57 hkmm.txt
+
+					#4.使用运算符
+					#显示第5列中数字等于109的行
+					mm@hackmm.com:~$ ls -al | awk '$5 == 109 {print}'
+					-rw-r--r--.  1 hackmm hackmm  109  6月 28 15:57 hkmm.txt
+
+					#显示第5列中数字小于200的行
+					mm@hackmm.com:~$ ls -al | awk '$5 < 109 {print}'
+
+					#将第5列中的每个数字乘以2输出
+					mm@hackmm.com:~$ ls -al | awk '{print $5 * 2}'
+
+					#5.使用不同的分隔符来分列，默认是空格
+					#假设有一个这样的文件，里面的内容如下
+					mm@hackmm.com:~$ more hkmm.txt 
+					hackmm$hackMM
+					Hackmm$HACkmm
+					HACKMM$HACKMM$Hackmm
+					hkmm$hkmm$hkmm$HKmm
+					Hkmm$Hkmm$Hkmm$hkMM
+					HKMM$HKMM$HKMM$hKmM
+
+					#指定$符号作为分割符，然后显示分割后的第2列
+					mm@hackmm.com:~$ awk -F'$' '{print $2}' hkmm.txt 
+					hackMM
+					HACkmm
+					HACKMM
+					hkmm
+					Hkmm
+					HKMM
+					</code>
+				    </pre>
+
+
+					<h2 id="Linux-video-4">0×4.视频演示</h2>
 
 
 					<!-- /正文 -->
