@@ -116,7 +116,7 @@
 					<p>在介绍Vim的几种模式之前，先简单的介绍一下Vi和Vim：</p>
 					<p>Vim编辑器是所有Unix及Linux系统下最基本的文本编辑器，有点类似Windows下的记事本程序(Notepad.exe)，但Vim编辑器比Windows下的记事本的功能强大很多。</p>
 					<p>Vim编辑器有四种常用模式，分别是命令模式、编辑模式、底行模式和可视化模式（Visual Mode）。</p>
-					<p>大部分发行版默认没有安装vim，可以根据自己的操作系统类型安装，下面是ubuntu和archlinux的安装示例：</p>
+					<p>大部分发行版默认没有安装vim，可以根据自己的操作系统类型安装，下面是Rockylinux、ubuntu和archlinux的安装示例：</p>
 					<!--bash-->
 					<pre class="command-line" 
 						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
@@ -124,7 +124,8 @@
 					     data-host="hackmm.com" 
 					     data-output=""> <!--指定哪些行为命令返回的结果，删除[mm@hackmm.com]$前缀-->
 					<code class="language-bash">
-					sudo apt-get install vim #ubuntu安装vim
+					sudo dnf install vim #Rocky安装vim
+					sudo apt install vim #ubuntu安装vim
 					sudo pacman -S vim #ArchLinux安装vim
 					</code>
 					</pre>
