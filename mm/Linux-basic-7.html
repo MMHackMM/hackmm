@@ -108,11 +108,12 @@
 					<h2 id="Linux-users-sudoers-1">0×1.Linux用户sudo权限管理</h2>
 
 					<p>★ 什么是 sudo：</p>
-					<p>● sudo 的全称是 "superuser do"。它可以授予普通用户执行特定系统管理任务的权限，而无需以 root 用户身份登录。这提高了系统的安全性，因为用户无需知道或使用 root 密码。</p>
-					<p>● sudo 可以通过配置文件  /etc/sudoers 来控制哪些用户可以执行哪些命令。这样可以限制权限，确保用户只能够执行他们被授权的任务。</p>
+					<p>● sudo 的全称是 "superuser do"。它可以授予普通用户执行特定系统管理任务的权限，而无需以 root 用户身份登录。这提高了系统的安全性，因为用户无需知道或使用 root 密码</p>
+					<p>● sudo 可以通过配置文件  /etc/sudoers 来控制哪些用户可以执行哪些命令。这样可以限制权限，确保用户只能够执行他们被授权的任务</p>
 					<p>● sudo 会记录所有使用  sudo 执行的命令。 这些日志可以帮助系统管理员审计和监控系统的使用 </p>
-					<p>● 使用  sudo 验证成功后，用户在短时间内（默认是 15 分钟）执行  sudo 命令时不需要再次输入密码，这段时间可以通过配置调整。</p>
+					<p>● 使用  sudo 验证成功后，用户在短时间内（默认是 15 分钟）执行  sudo 命令时不需要再次输入密码，这段时间可以通过配置调整</p>
 					<p>● 使用 sudo 命令后，可以使用 sudo -k 来清除 sudo 会话缓存，以便下次使用 sudo 时需要重新输入密码</p>
+					<p>● sudo无法用于shell的内建命令（例如cd），这是因为cd命令不是一个独立的可执行文件</p>
 
 					<p>★ /etc/sudoers 配置文件语法格式：</p>
 					<pre data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'>
@@ -167,15 +168,23 @@
 					<code class="language-bash">
 					#直接使用su命令，默认切换到root用户，且不会改变当前的环境变量
 					mm@hackmm.com:~$ su 
+					#用sudo命令实现
+					mm@hackmm.com:~$ sudo -s
 
 					#直接使用su -命令，默认切换到root用户，改变当前的环境变量为root用户的环境变量
 					mm@hackmm.com:~$ su -
+					#用sudo命令实现
+					mm@hackmm.com:~$ sudo -i
 
 					#指定切换到某个用户，例如hackmm用户
 					mm@hackmm.com:~$ su hackmm
 
 					#指定切换到某个用户且改变当前的环境变量为hackmm用户的环境变量
 					mm@hackmm.com:~$ su - hackmm
+
+					#如果你只需要在一个命令中切换目录并执行一个操作，可以使用 sudo 与 bash -c 结合来临时切换目录
+					#使用sudo命令启动bash然后使用-c参数执行命令（bash会暂时获得当前用户sudo权限）
+					sudo bash -c 'cd /root && ls -la'
 					</code>
 					</pre>
 
