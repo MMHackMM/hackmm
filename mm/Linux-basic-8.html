@@ -110,7 +110,6 @@
 						 <li class="subli"><a href="#Linux-users-and-groups-10">c.如何锁定和解锁用户</a></li>
 						 <li class="subli"><a href="#Linux-users-and-groups-11">d.如何删除用户</a></li>
 						 <li class="subli"><a href="#Linux-users-and-groups-12">e.修改用户属组</a></li>
-						 <li><a href="#Linux-users-sudoers-13">0×5.Linux用户sudo权限管理</a></li>
 					 </ul>
 					<!-- /目录 -->
 
@@ -484,59 +483,6 @@
 					</code>
 					</pre>
 					<p>从上面这个实例可以看到，对文件而言，如果文件所有者不是u1，只要文件的属组是g1，u1又属于g1组，不管用户的默认组是不是g1，用户对这个文件的权限就等于g1组对这个文件的权限。</p>
-
-					<h2 id="Linux-users-sudoers-13">0×5.Linux用户sudo权限管理</h2>
-					<p>★ 什么是 sudo：</p>
-					<p>● sudo 的全称是 "superuser do"。它可以授予普通用户执行特定系统管理任务的权限，而无需以 root 用户身份登录。这提高了系统的安全性，因为用户无需知道或使用 root 密码。</p>
-					<p>● sudo 可以通过配置文件  /etc/sudoers 来控制哪些用户可以执行哪些命令。这样可以限制权限，确保用户只能够执行他们被授权的任务。</p>
-					<p>● sudo 会记录所有使用  sudo 执行的命令。 这些日志可以帮助系统管理员审计和监控系统的使用 </p>
-					<p>● 使用  sudo 验证成功后，用户在短时间内（默认是 15 分钟）执行  sudo 命令时不需要再次输入密码。这段时间可以通过配置调整。</p>
-
-					<p>★ /etc/sudoers 配置文件语法格式：</p>
-					<pre data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'>
-					<code class="language-bash">
-					#示例-1
-					#下面这一条配置个字段的含义如下
-					#第一个root代表用户名称，这里是root账户
-					#第一个 ALL 表示该规则适用于所有主机。如果有多台主机共享同一个 sudoers 文件，该规则将在所有主机上生效
-					#(ALL:ALL)中第一个ALL 表示用户可以以任何用户的身份运行命令，第二个ALL表示用户可以以任何组的身份运行命令
-					#整条配置的最后一个 ALL 表示用户可以运行所有命令
-					root ALL=(ALL:ALL) ALL
-
-					#示例-2
-					#代表用户hackmm可以在所有共享这个sudoers文件的主机上，以任何用户身份，任何组身份，无需密码（NOPASSWD）运行所有命令
-					hackmm ALL=(ALL:ALL) NOPASSWD: ALL
-
-					#示例-3
-					#代表hackmm可以在所有共享这个sudoers文件的主机上，以www-data用户或www-data组的身份，执行“/usr/bin/systemctl restart apache2”这条命了
-					hackmm ALL=(www-data:www-data) /usr/bin/systemctl restart apache2
-
-					#示例-4
-					#代表hackmm可以在所有共享这个sudoers文件的主机上，以任何用户和组身份，执行后面的apt或vim程序（将所有需要给与权限的程序用英文逗号隔开）
-					hackmm ALL=(ALL:ALL) /usr/bin/apt, /usr/bin/vim
-
-					#示例-5
-					#用%号开头可以指定一个组，所以这条配置的意思就是，所有在wheel组下的用户可以在所有共享这个sudoers文件的主机上，以任何用户和组身份，不用密码执行/usr/bin/python3程序
-					#wheel 组是一个特别的用户组，通常用于限制哪些用户可以使用 sudo 命令来获得超级用户权限。
-					#这是一种安全措施，确保只有经过特别授权的用户才能执行需要超级用户权限的操作。
-					%wheel ALL=(ALL:ALL) NOPASSWD: /usr/bin/python3
-
-					#示例-6
-					#includedir用于包含指定目录中的所有配置文件
-					#这种方法使得 sudo 配置更加模块化和易于管理
-					#通过将不同用户或组的配置分散到多个文件中，可以更轻松地管理权限，并减少出错的可能性
-					#在被包含的目录中，可以自定义任意名字的sudoers配置文件，只要配置文件中包含的语法不出错就行
-					@includedir /etc/sudoers.d
-					</code>
-					</pre>
-					<p>● </p>
-
-					
-					<pre data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'>
-					<code class="language-bash">
-					root@hackmm.com:~# 
-					</code>
-					</pre>
 
 					<!-- /正文 -->
 
