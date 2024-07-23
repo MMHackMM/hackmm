@@ -94,7 +94,7 @@
 				</header>
 				<section class="text-body">
 					<h2>引言</h2>
-					<p>这篇文章主要介绍Linux中用户和用户组的基础知识；包括如何使用命令创建和删除用户、创建和删除用户组、如何有效的管理用户和用户组，最后介绍了如何使用sudoers文件控制用户权限。</p>
+					<p>这篇文章主要介绍Linux中用户和用户组的基础知识；包括如何使用命令创建和删除用户、创建和删除用户组、如何有效的管理用户和用户组。</p>
 					<!-- 目录 -->
 					<h2>文章目录</h2>
 					<ul class="contents">	
@@ -372,7 +372,8 @@
 					<p>Ps：在Ubuntu系统中，普通用户的UID和GID都是从1000开始的，1000以内都是系统UID和GID，而CentOS系统的普通用户UID和GID是从500开始的，请根据不同系统判断，判断的方法就是创建一个普通用户就知道了，如果是1000+的UID那么系统用户UID就是0-1000。</p>
 
 					<h3 id="Linux-users-and-groups-12">e.修改用户属组</h3>
-					<p>在CentOS使用useradd创建用户后，默认会创建一个与用户同名的用户组，这个组就是用户的默认属组，除此之外，用户也同时能够属于多个组，请看下面的实例：</p>
+					<p>在CentOS使用useradd创建用户后，默认会创建一个与用户同名的用户组，这个组就是用户的默认属组，除此之外，用户也同时能够属于多个组；</p>
+					<p>实例1：</p>
 					<pre class="command-line" 
 						 data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'
 					     data-user="mm" 
@@ -434,7 +435,52 @@
 					</code>
 					</pre>
 
-					<p>再来看另一个实例：</p>
+					<p>实例2：</p>
+					<pre data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'>
+					<code class="language-bash">
+					#创建1个用户和2个组
+					sudo useradd u1
+					sudo groupadd g1
+					sudo groupadd g2
+
+					#将u1用户放入g1组中，但不改变u1用户的默认组
+					#usermod的-G参数使用附属组的方式将用户放入后面指定的组中
+					sudo usermod -G g1 u1
+
+					#查看u1信息
+					id u1
+					用户id=1001(u1) 组id=1001(u1) 组=1001(u1),1003(g1)
+
+					#将u1用户放入g2中，但不改变u1用户的默认组
+					sudo usermod -G g2 u1
+
+					#查看u1信息
+					id u1
+					用户id=1001(u1) 组id=1001(u1) 组=1001(u1),1004(g2)
+
+					#我们发现直接使用-G参数，会覆盖之前的附属组，如果现在我要将u1同时放到g1和g2这两个附属组中，但不改变u1的默认组
+					sudo usermod -aG g1,g2 u1
+
+					#查看u1信息
+					id u1
+					用户id=1001(u1) 组id=1001(u1) 组=1001(u1),1003(g1),1004(g2)
+
+					#将u1从附属组移除（移出某组）
+					sudo gpasswd -d u1 g1
+					正在将用户“u1”从“g1”组中删除
+
+					id u1
+					用户id=1001(u1) 组id=1001(u1) 组=1001(u1),1004(g2)
+
+					sudo gpasswd -d u1 g2
+					正在将用户“u1”从“g2”组中删除
+					
+					id u1
+					用户id=1001(u1) 组id=1001(u1) 组=1001(u1)
+					</code>
+					</pre>
+
+					<p>实例3：</p>
 					<pre data-prismjs-copy='复制代码' data-prismjs-copy-success='成功复制！'>
 					<code class="language-bash">
 					#首先创建一个组g1，一个用户u1
